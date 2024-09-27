@@ -1,3 +1,25 @@
+## Below is TanStack Start Clerk
+
+Gotten from [here](https://github.com/TanStack/router/tree/main/examples/react/start-clerk-basic).
+
+To make it work:
+
+```
+bun i
+bun dev
+```
+
+And have this in `.env`:
+
+<!-- TODO: create some keys so others can also run it (not LA specific..) -->
+
+You can get those keys from [Clerk](https://clerk.com/).
+
+```
+CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
+
 # Welcome to TanStack.com!
 
 This site is built with TanStack Router!
