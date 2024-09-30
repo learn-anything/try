@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@clerk/tanstack-start": "0.4.1",
+    "@tanstack/react-query": "^5.56.2",
+    "@tanstack/react-query-devtools": "^5.58.0",
     "@tanstack/react-router": "^1.58.11",
     "@tanstack/router-devtools": "^1.58.11",
     "@tanstack/start": "^1.58.11",

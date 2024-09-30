@@ -11,6 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as NewRouteImport } from './routes/new-route'
+import { Route as FetchImport } from './routes/fetch'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthedPostsImport } from './routes/_authed/posts'
@@ -19,6 +21,16 @@ import { Route as AuthedProfileSplatImport } from './routes/_authed/profile.$'
 import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts.$postId'
 
 // Create/Update Routes
+
+const NewRouteRoute = NewRouteImport.update({
+  path: '/new-route',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FetchRoute = FetchImport.update({
+  path: '/fetch',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthedRoute = AuthedImport.update({
   id: '/_authed',
@@ -66,6 +78,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthedImport
+      parentRoute: typeof rootRoute
+    }
+    '/fetch': {
+      id: '/fetch'
+      path: '/fetch'
+      fullPath: '/fetch'
+      preLoaderRoute: typeof FetchImport
+      parentRoute: typeof rootRoute
+    }
+    '/new-route': {
+      id: '/new-route'
+      path: '/new-route'
+      fullPath: '/new-route'
+      preLoaderRoute: typeof NewRouteImport
       parentRoute: typeof rootRoute
     }
     '/_authed/posts': {
@@ -131,6 +157,8 @@ const AuthedRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthedRouteWithChildren
+  '/fetch': typeof FetchRoute
+  '/new-route': typeof NewRouteRoute
   '/posts': typeof AuthedPostsRouteWithChildren
   '/posts/$postId': typeof AuthedPostsPostIdRoute
   '/profile/$': typeof AuthedProfileSplatRoute
@@ -140,6 +168,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthedRouteWithChildren
+  '/fetch': typeof FetchRoute
+  '/new-route': typeof NewRouteRoute
   '/posts/$postId': typeof AuthedPostsPostIdRoute
   '/profile/$': typeof AuthedProfileSplatRoute
   '/posts': typeof AuthedPostsIndexRoute
@@ -149,6 +179,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
+  '/fetch': typeof FetchRoute
+  '/new-route': typeof NewRouteRoute
   '/_authed/posts': typeof AuthedPostsRouteWithChildren
   '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
   '/_authed/profile/$': typeof AuthedProfileSplatRoute
@@ -157,13 +189,30 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/posts' | '/posts/$postId' | '/profile/$' | '/posts/'
+  fullPaths:
+    | '/'
+    | ''
+    | '/fetch'
+    | '/new-route'
+    | '/posts'
+    | '/posts/$postId'
+    | '/profile/$'
+    | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/posts/$postId' | '/profile/$' | '/posts'
+  to:
+    | '/'
+    | ''
+    | '/fetch'
+    | '/new-route'
+    | '/posts/$postId'
+    | '/profile/$'
+    | '/posts'
   id:
     | '__root__'
     | '/'
     | '/_authed'
+    | '/fetch'
+    | '/new-route'
     | '/_authed/posts'
     | '/_authed/posts/$postId'
     | '/_authed/profile/$'
@@ -174,11 +223,15 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRoute: typeof AuthedRouteWithChildren
+  FetchRoute: typeof FetchRoute
+  NewRouteRoute: typeof NewRouteRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRoute: AuthedRouteWithChildren,
+  FetchRoute: FetchRoute,
+  NewRouteRoute: NewRouteRoute,
 }
 
 export const routeTree = rootRoute
@@ -194,7 +247,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_authed"
+        "/_authed",
+        "/fetch",
+        "/new-route"
       ]
     },
     "/": {
@@ -206,6 +261,12 @@ export const routeTree = rootRoute
         "/_authed/posts",
         "/_authed/profile/$"
       ]
+    },
+    "/fetch": {
+      "filePath": "fetch.tsx"
+    },
+    "/new-route": {
+      "filePath": "new-route.tsx"
     },
     "/_authed/posts": {
       "filePath": "_authed/posts.tsx",

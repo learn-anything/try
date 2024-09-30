@@ -1,17 +1,20 @@
 /// <reference types="vite/client" />
 import {
-  Link,
-  Outlet,
-  ScrollRestoration,
-  createRootRoute,
-} from "@tanstack/react-router"
-import {
   ClerkProvider,
   SignInButton,
   SignedIn,
   SignedOut,
   UserButton,
 } from "@clerk/tanstack-start"
+import { getAuth } from "@clerk/tanstack-start/server"
+import type { QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import {
+  Link,
+  Outlet,
+  ScrollRestoration,
+  createRootRouteWithContext,
+} from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import {
   Body,
@@ -22,7 +25,6 @@ import {
   createServerFn,
 } from "@tanstack/start"
 import * as React from "react"
-import { getAuth } from "@clerk/tanstack-start/server"
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js"
 import { NotFound } from "~/components/NotFound.js"
 import appCss from "~/styles/app.css?url"
@@ -35,7 +37,9 @@ const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
   }
 })
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient
+}>()({
   meta: () => [
     {
       charSet: "utf-8",
@@ -120,6 +124,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           >
             Posts
           </Link>
+          <Link
+            to="/fetch"
+            activeProps={{
+              className: "font-bold",
+            }}
+          >
+            Fetch
+          </Link>
           <div className="ml-auto">
             <SignedIn>
               <UserButton />
@@ -133,6 +145,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <TanStackRouterDevtools position="bottom-right" />
+        <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />
       </Body>
     </Html>
