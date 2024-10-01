@@ -11,227 +11,128 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as NewRouteImport } from './routes/new-route'
-import { Route as FetchImport } from './routes/fetch'
-import { Route as AuthedImport } from './routes/_authed'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthedPostsImport } from './routes/_authed/posts'
-import { Route as AuthedPostsIndexImport } from './routes/_authed/posts.index'
-import { Route as AuthedProfileSplatImport } from './routes/_authed/profile.$'
-import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts.$postId'
+import { Route as PagesImport } from './routes/_pages'
+import { Route as LandingImport } from './routes/_landing'
+import { Route as LandingIndexImport } from './routes/_landing/index'
+import { Route as PagesSplatImport } from './routes/_pages/$'
 
 // Create/Update Routes
 
-const NewRouteRoute = NewRouteImport.update({
-  path: '/new-route',
+const PagesRoute = PagesImport.update({
+  id: '/_pages',
   getParentRoute: () => rootRoute,
 } as any)
 
-const FetchRoute = FetchImport.update({
-  path: '/fetch',
+const LandingRoute = LandingImport.update({
+  id: '/_landing',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthedRoute = AuthedImport.update({
-  id: '/_authed',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const IndexRoute = IndexImport.update({
+const LandingIndexRoute = LandingIndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LandingRoute,
 } as any)
 
-const AuthedPostsRoute = AuthedPostsImport.update({
-  path: '/posts',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
-const AuthedPostsIndexRoute = AuthedPostsIndexImport.update({
-  path: '/',
-  getParentRoute: () => AuthedPostsRoute,
-} as any)
-
-const AuthedProfileSplatRoute = AuthedProfileSplatImport.update({
-  path: '/profile/$',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
-const AuthedPostsPostIdRoute = AuthedPostsPostIdImport.update({
-  path: '/$postId',
-  getParentRoute: () => AuthedPostsRoute,
+const PagesSplatRoute = PagesSplatImport.update({
+  path: '/$',
+  getParentRoute: () => PagesRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_authed': {
-      id: '/_authed'
+    '/_landing': {
+      id: '/_landing'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthedImport
+      preLoaderRoute: typeof LandingImport
       parentRoute: typeof rootRoute
     }
-    '/fetch': {
-      id: '/fetch'
-      path: '/fetch'
-      fullPath: '/fetch'
-      preLoaderRoute: typeof FetchImport
+    '/_pages': {
+      id: '/_pages'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PagesImport
       parentRoute: typeof rootRoute
     }
-    '/new-route': {
-      id: '/new-route'
-      path: '/new-route'
-      fullPath: '/new-route'
-      preLoaderRoute: typeof NewRouteImport
-      parentRoute: typeof rootRoute
+    '/_pages/$': {
+      id: '/_pages/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof PagesSplatImport
+      parentRoute: typeof PagesImport
     }
-    '/_authed/posts': {
-      id: '/_authed/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof AuthedPostsImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/posts/$postId': {
-      id: '/_authed/posts/$postId'
-      path: '/$postId'
-      fullPath: '/posts/$postId'
-      preLoaderRoute: typeof AuthedPostsPostIdImport
-      parentRoute: typeof AuthedPostsImport
-    }
-    '/_authed/profile/$': {
-      id: '/_authed/profile/$'
-      path: '/profile/$'
-      fullPath: '/profile/$'
-      preLoaderRoute: typeof AuthedProfileSplatImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/posts/': {
-      id: '/_authed/posts/'
+    '/_landing/': {
+      id: '/_landing/'
       path: '/'
-      fullPath: '/posts/'
-      preLoaderRoute: typeof AuthedPostsIndexImport
-      parentRoute: typeof AuthedPostsImport
+      fullPath: '/'
+      preLoaderRoute: typeof LandingIndexImport
+      parentRoute: typeof LandingImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthedPostsRouteChildren {
-  AuthedPostsPostIdRoute: typeof AuthedPostsPostIdRoute
-  AuthedPostsIndexRoute: typeof AuthedPostsIndexRoute
+interface LandingRouteChildren {
+  LandingIndexRoute: typeof LandingIndexRoute
 }
 
-const AuthedPostsRouteChildren: AuthedPostsRouteChildren = {
-  AuthedPostsPostIdRoute: AuthedPostsPostIdRoute,
-  AuthedPostsIndexRoute: AuthedPostsIndexRoute,
+const LandingRouteChildren: LandingRouteChildren = {
+  LandingIndexRoute: LandingIndexRoute,
 }
 
-const AuthedPostsRouteWithChildren = AuthedPostsRoute._addFileChildren(
-  AuthedPostsRouteChildren,
-)
+const LandingRouteWithChildren =
+  LandingRoute._addFileChildren(LandingRouteChildren)
 
-interface AuthedRouteChildren {
-  AuthedPostsRoute: typeof AuthedPostsRouteWithChildren
-  AuthedProfileSplatRoute: typeof AuthedProfileSplatRoute
+interface PagesRouteChildren {
+  PagesSplatRoute: typeof PagesSplatRoute
 }
 
-const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedPostsRoute: AuthedPostsRouteWithChildren,
-  AuthedProfileSplatRoute: AuthedProfileSplatRoute,
+const PagesRouteChildren: PagesRouteChildren = {
+  PagesSplatRoute: PagesSplatRoute,
 }
 
-const AuthedRouteWithChildren =
-  AuthedRoute._addFileChildren(AuthedRouteChildren)
+const PagesRouteWithChildren = PagesRoute._addFileChildren(PagesRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
-  '/fetch': typeof FetchRoute
-  '/new-route': typeof NewRouteRoute
-  '/posts': typeof AuthedPostsRouteWithChildren
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/profile/$': typeof AuthedProfileSplatRoute
-  '/posts/': typeof AuthedPostsIndexRoute
+  '': typeof PagesRouteWithChildren
+  '/$': typeof PagesSplatRoute
+  '/': typeof LandingIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
-  '/fetch': typeof FetchRoute
-  '/new-route': typeof NewRouteRoute
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/profile/$': typeof AuthedProfileSplatRoute
-  '/posts': typeof AuthedPostsIndexRoute
+  '': typeof PagesRouteWithChildren
+  '/$': typeof PagesSplatRoute
+  '/': typeof LandingIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_authed': typeof AuthedRouteWithChildren
-  '/fetch': typeof FetchRoute
-  '/new-route': typeof NewRouteRoute
-  '/_authed/posts': typeof AuthedPostsRouteWithChildren
-  '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/_authed/profile/$': typeof AuthedProfileSplatRoute
-  '/_authed/posts/': typeof AuthedPostsIndexRoute
+  '/_landing': typeof LandingRouteWithChildren
+  '/_pages': typeof PagesRouteWithChildren
+  '/_pages/$': typeof PagesSplatRoute
+  '/_landing/': typeof LandingIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/fetch'
-    | '/new-route'
-    | '/posts'
-    | '/posts/$postId'
-    | '/profile/$'
-    | '/posts/'
+  fullPaths: '' | '/$' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/fetch'
-    | '/new-route'
-    | '/posts/$postId'
-    | '/profile/$'
-    | '/posts'
-  id:
-    | '__root__'
-    | '/'
-    | '/_authed'
-    | '/fetch'
-    | '/new-route'
-    | '/_authed/posts'
-    | '/_authed/posts/$postId'
-    | '/_authed/profile/$'
-    | '/_authed/posts/'
+  to: '' | '/$' | '/'
+  id: '__root__' | '/_landing' | '/_pages' | '/_pages/$' | '/_landing/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthedRoute: typeof AuthedRouteWithChildren
-  FetchRoute: typeof FetchRoute
-  NewRouteRoute: typeof NewRouteRoute
+  LandingRoute: typeof LandingRouteWithChildren
+  PagesRoute: typeof PagesRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuthedRoute: AuthedRouteWithChildren,
-  FetchRoute: FetchRoute,
-  NewRouteRoute: NewRouteRoute,
+  LandingRoute: LandingRouteWithChildren,
+  PagesRoute: PagesRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -246,47 +147,29 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/_authed",
-        "/fetch",
-        "/new-route"
+        "/_landing",
+        "/_pages"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_authed": {
-      "filePath": "_authed.tsx",
+    "/_landing": {
+      "filePath": "_landing.tsx",
       "children": [
-        "/_authed/posts",
-        "/_authed/profile/$"
+        "/_landing/"
       ]
     },
-    "/fetch": {
-      "filePath": "fetch.tsx"
-    },
-    "/new-route": {
-      "filePath": "new-route.tsx"
-    },
-    "/_authed/posts": {
-      "filePath": "_authed/posts.tsx",
-      "parent": "/_authed",
+    "/_pages": {
+      "filePath": "_pages.tsx",
       "children": [
-        "/_authed/posts/$postId",
-        "/_authed/posts/"
+        "/_pages/$"
       ]
     },
-    "/_authed/posts/$postId": {
-      "filePath": "_authed/posts.$postId.tsx",
-      "parent": "/_authed/posts"
+    "/_pages/$": {
+      "filePath": "_pages/$.tsx",
+      "parent": "/_pages"
     },
-    "/_authed/profile/$": {
-      "filePath": "_authed/profile.$.tsx",
-      "parent": "/_authed"
-    },
-    "/_authed/posts/": {
-      "filePath": "_authed/posts.index.tsx",
-      "parent": "/_authed/posts"
+    "/_landing/": {
+      "filePath": "_landing/index.tsx",
+      "parent": "/_landing"
     }
   }
 }
