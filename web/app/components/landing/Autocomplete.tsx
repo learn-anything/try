@@ -34,14 +34,15 @@ export function Autocomplete({
   const [hasInteracted, setHasInteracted] = React.useState(false)
   const [showDropdown, setShowDropdown] = React.useState(false)
 
-  const initialShuffledTopics = React.useMemo(
-    () => shuffleArray(topics).slice(0, 5),
-    [topics],
-  )
+  const [initialTopics, setInitialTopics] = React.useState<GraphNode[]>([])
+
+  React.useEffect(() => {
+    setInitialTopics(shuffleArray(topics).slice(0, 5))
+  }, [topics])
 
   const filteredTopics = React.useMemo(() => {
     if (!inputValue) {
-      return initialShuffledTopics
+      return initialTopics
     }
 
     const regex = searchSafeRegExp(inputValue)
@@ -56,7 +57,7 @@ export function Autocomplete({
       )
       .sort((a, b) => a.prettyName.localeCompare(b.prettyName))
       .slice(0, 10)
-  }, [inputValue, topics, initialShuffledTopics])
+  }, [inputValue, topics, initialTopics])
 
   const handleSelect = React.useCallback(
     (topic: GraphNode) => {

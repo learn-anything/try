@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import Graph from "@/data/graph.json"
 
 export const Route = createFileRoute("/_landing/")({
-  component: () => <LandingComponent />,
+  component: LandingComponent,
 })
 
 const GraphData = Graph as GraphNode[]

@@ -232,7 +232,7 @@ class State {
   alpha = 0
   frame_iter_limit = raf.frameIterationsLimit(60)
   schedule_filter = schedule.scheduleIdle(filterNodes)
-  ro: ResizeObserver = new ResizeObserver(() => {})
+  ro: ResizeObserver | undefined
 }
 
 function init(
@@ -325,7 +325,7 @@ function cleanup(s: State) {
   cancelAnimationFrame(s.raf_id)
   s.gestures && fg.canvas.cleanupCanvasGestures(s.gestures)
   s.schedule_filter.clear()
-  s.ro.disconnect()
+  s.ro?.disconnect()
 }
 
 export type ForceGraphProps = {
