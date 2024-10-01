@@ -28,11 +28,10 @@ export function Autocomplete({
   onInputChange,
 }: AutocompleteProps): JSX.Element {
   const inputRef = React.useRef<HTMLInputElement>(null)
-  const [, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
   const isMounted = useIsMounted()
   const [inputValue, setInputValue] = React.useState("")
   const [hasInteracted, setHasInteracted] = React.useState(false)
-  const [showDropdown, setShowDropdown] = React.useState(false)
 
   const [initialTopics, setInitialTopics] = React.useState<GraphNode[]>([])
 
@@ -70,21 +69,23 @@ export function Autocomplete({
   const handleInputChange = React.useCallback(
     (value: string) => {
       setInputValue(value)
-      setShowDropdown(true)
+      setOpen(true)
       setHasInteracted(true)
       onInputChange(value)
     },
     [onInputChange],
   )
 
-  const handleFocus = React.useCallback(() => {
-    setHasInteracted(true)
-  }, [])
-
-  const handleClick = React.useCallback(() => {
-    setShowDropdown(true)
-    setHasInteracted(true)
-  }, [])
+  const handleKeyDown = React.useCallback(
+    (event: React.KeyboardEvent) => {
+      if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !open) {
+        event.preventDefault()
+        setOpen(true)
+        setHasInteracted(true)
+      }
+    },
+    [open],
+  )
 
   const commandKey = React.useMemo(() => {
     return filteredTopics
@@ -104,8 +105,8 @@ export function Autocomplete({
   return (
     <Command
       className={cn("relative mx-auto max-w-md overflow-visible shadow-md", {
-        "rounded-lg border": !showDropdown,
-        "rounded-none rounded-t-lg border-l border-r border-t": showDropdown,
+        "rounded-lg border": !open,
+        "rounded-none rounded-t-lg border-l border-r border-t": open,
       })}
     >
       <div className={"relative flex items-center px-2 py-3"}>
@@ -113,11 +114,12 @@ export function Autocomplete({
           ref={inputRef}
           value={inputValue}
           onValueChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           onBlur={() => {
-            setTimeout(() => setShowDropdown(false), 100)
+            setTimeout(() => setOpen(false), 100)
           }}
-          onFocus={handleFocus}
-          onClick={handleClick}
+          onFocus={() => setHasInteracted(true)}
+          onClick={() => setOpen(true)}
           placeholder={filteredTopics[0]?.prettyName}
           className={cn(
             "placeholder:text-muted-foreground flex-1 bg-transparent px-2 outline-none",
@@ -127,7 +129,7 @@ export function Autocomplete({
       </div>
       <div className="relative">
         <AnimatePresence>
-          {showDropdown && hasInteracted && (
+          {open && hasInteracted && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
