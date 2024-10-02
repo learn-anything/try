@@ -119,7 +119,10 @@ export function Autocomplete({
             setTimeout(() => setOpen(false), 100)
           }}
           onFocus={() => setHasInteracted(true)}
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true)
+            setHasInteracted(true)
+          }}
           placeholder={filteredTopics[0]?.prettyName}
           className={cn(
             "placeholder:text-muted-foreground flex-1 bg-transparent px-2 outline-none",
