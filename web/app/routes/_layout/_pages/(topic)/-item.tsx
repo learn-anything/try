@@ -21,8 +21,8 @@ import {
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 import { useClerk } from "@clerk/tanstack-start"
-import { openPopoverForIdAtom } from "~/routes/_pages/$"
 import { Link, useLocation, useNavigate } from "@tanstack/react-router"
+import { openPopoverForIdAtom } from "./$"
 
 interface LinkItemProps extends React.ComponentPropsWithoutRef<"div"> {
   topic: Topic

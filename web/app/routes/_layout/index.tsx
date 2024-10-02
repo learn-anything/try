@@ -6,7 +6,7 @@ import { GraphData } from "~/lib/constants"
 import { Autocomplete } from "~/components/routes/landing/Autocomplete"
 import { ForceGraphClient } from "~/components/routes/landing/ForceGraphClient"
 
-export const Route = createFileRoute("/_landing/")({
+export const Route = createFileRoute("/_layout/")({
   component: LandingComponent,
 })
 

@@ -1,17 +1,17 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router"
 import { ThemeProvider } from "next-themes"
-import { cn } from "~/lib/utils"
+import { ClerkProvider } from "~/lib/providers/clerk-provider"
 
-export const Route = createFileRoute("/_landing")({
-  component: LandingLayoutComponent,
+export const Route = createFileRoute("/_layout")({
+  component: LayoutComponent,
 })
 
-function LandingLayoutComponent() {
+function LayoutComponent() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className={cn("h-full w-full font-sans antialiased")}>
+      <ClerkProvider>
         <Outlet />
-      </div>
+      </ClerkProvider>
     </ThemeProvider>
   )
 }

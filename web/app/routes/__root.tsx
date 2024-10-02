@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-import { ClerkProvider } from "@clerk/tanstack-start"
 import { getAuth } from "@clerk/tanstack-start/server"
 import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -84,11 +83,9 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   return (
-    <ClerkProvider>
-      <RootDocument>
-        <Outlet />
-      </RootDocument>
-    </ClerkProvider>
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
   )
 }
 

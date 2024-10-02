@@ -5,7 +5,7 @@ import {
   Section as SectionSchema,
   Topic,
 } from "@/lib/schema"
-import { LinkItem } from "./item"
+import { LinkItem } from "./-item"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
 
 export type FlattenedItem =

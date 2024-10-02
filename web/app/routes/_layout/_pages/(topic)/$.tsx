@@ -6,21 +6,17 @@ import { Topic } from "@/lib/schema"
 import { atom } from "jotai"
 import { Skeleton } from "@/components/ui/skeleton"
 import { LaIcon } from "@/components/custom/la-icon"
-import { TopicDetailList } from "~/components/routes/topics/detail/list"
-import { TopicDetailHeader } from "~/components/routes/topics/detail/header"
+import { TopicDetailHeader } from "./-header"
+import { TopicDetailList } from "./-list"
 
-export const Route = createFileRoute("/_pages/$")({
+export const Route = createFileRoute("/_layout/_pages/(topic)/$")({
   component: TopicDetailComponent,
 })
 
-interface TopicDetailRouteProps {
-  topicName: string
-}
-
 export const openPopoverForIdAtom = atom<string | null>(null)
 
-export function TopicDetailComponent({ topicName }: TopicDetailRouteProps) {
-  const params = useParams({ from: "/_pages/$" })
+export function TopicDetailComponent() {
+  const params = useParams({ from: "/_layout/_pages/$" })
   const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
 
   const topicID = React.useMemo(

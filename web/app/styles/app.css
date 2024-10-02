@@ -72,8 +72,12 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  html {
+    @apply size-full;
+  }
+  body,
+  div#root {
+    @apply bg-background text-foreground size-full font-sans antialiased;
   }
 }
 

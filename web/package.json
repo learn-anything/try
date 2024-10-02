@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/tanstack-start": "0.4.1",
+    "@clerk/themes": "^2.1.35",
     "@nothing-but/force-graph": "^0.9.5",
     "@nothing-but/utils": "^0.17.0",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -49,7 +50,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
-    "@types/react": "^18.3.10",
+    "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.2",
     "autoprefixer": "^10.4.20",
