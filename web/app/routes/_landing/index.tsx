@@ -1,22 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import * as React from "react"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { motion } from "framer-motion"
-import { Autocomplete } from "~/components/landing/Autocomplete"
-import { ForceGraphClient } from "~/components/landing/ForceGraphClient"
 import { cn } from "@/lib/utils"
-import Graph from "@/data/graph.json"
+import { GraphData } from "~/lib/constants"
+import { Autocomplete } from "~/components/routes/landing/Autocomplete"
+import { ForceGraphClient } from "~/components/routes/landing/ForceGraphClient"
 
 export const Route = createFileRoute("/_landing/")({
   component: LandingComponent,
 })
-
-const GraphData = Graph as GraphNode[]
-
-export interface GraphNode {
-  name: string
-  prettyName: string
-  connectedTopics: string[]
-}
 
 function LandingComponent() {
   const navigate = useNavigate()

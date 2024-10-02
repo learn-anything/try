@@ -1,7 +1,11 @@
 import { SignIn } from "@clerk/tanstack-start"
 import { Outlet, createFileRoute } from "@tanstack/react-router"
 import { ThemeProvider } from "next-themes"
+import { Sidebar } from "~/components/sidebar/sidebar"
 import { cn } from "~/lib/utils"
+import { Provider as JotaiProvider } from "jotai"
+import { TooltipProvider } from "~/components/ui/tooltip"
+import { JazzAndAuth } from "~/lib/providers/jazz-provider"
 
 export const Route = createFileRoute("/_pages")({
   beforeLoad: ({ context }) => {
@@ -26,9 +30,23 @@ export const Route = createFileRoute("/_pages")({
 function PagesLayoutComponent() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className={cn("h-full w-full font-sans antialiased")}>
-        <Outlet />
-      </div>
+      <JotaiProvider>
+        <TooltipProvider>
+          <JazzAndAuth>
+            <div className={cn("h-full w-full font-sans antialiased")}>
+              <div className="flex h-full min-h-full w-full flex-row items-stretch overflow-hidden">
+                <Sidebar />
+
+                <div className="relative flex min-w-0 flex-1 flex-col">
+                  <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
+                    <Outlet />
+                  </main>
+                </div>
+              </div>
+            </div>
+          </JazzAndAuth>
+        </TooltipProvider>
+      </JotaiProvider>
     </ThemeProvider>
   )
 }
