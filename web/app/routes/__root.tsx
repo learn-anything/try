@@ -1,16 +1,9 @@
 /// <reference types="vite/client" />
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/tanstack-start"
+import { ClerkProvider } from "@clerk/tanstack-start"
 import { getAuth } from "@clerk/tanstack-start/server"
 import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
-  Link,
   Outlet,
   ScrollRestoration,
   createRootRouteWithContext,
@@ -106,42 +99,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Meta />
       </Head>
       <Body>
-        <div className="p-2 flex gap-2 text-lg">
-          <Link
-            to="/"
-            activeProps={{
-              className: "font-bold",
-            }}
-            activeOptions={{ exact: true }}
-          >
-            Home
-          </Link>{" "}
-          <Link
-            to="/posts"
-            activeProps={{
-              className: "font-bold",
-            }}
-          >
-            Posts
-          </Link>
-          <Link
-            to="/fetch"
-            activeProps={{
-              className: "font-bold",
-            }}
-          >
-            Fetch
-          </Link>
-          <div className="ml-auto">
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal" />
-            </SignedOut>
-          </div>
-        </div>
-        <hr />
         {children}
         <ScrollRestoration />
         <TanStackRouterDevtools position="bottom-right" />
