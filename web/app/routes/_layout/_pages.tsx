@@ -1,29 +1,53 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router"
+import { Provider as JotaiProvider } from "jotai"
+import { Toaster } from "sonner"
+import { ConfirmDialogProvider } from "@omit/react-confirm-dialog"
+
 import { Sidebar } from "~/components/sidebar/sidebar"
 import { TooltipProvider } from "~/components/ui/tooltip"
 import { JazzAndAuth } from "~/lib/providers/jazz-provider"
-import { Provider as JotaiProvider } from "jotai"
+import { Shortcut } from "~/components/shortcut/shortcut"
+import { Onboarding } from "~/components/Onboarding"
 
 export const Route = createFileRoute("/_layout/_pages")({
-  component: PagesLayoutComponent,
+  component: PagesLayout,
 })
 
-function PagesLayoutComponent() {
+function PagesLayout() {
   return (
     <JotaiProvider>
       <TooltipProvider>
-        <JazzAndAuth>
-          <div className="flex h-full min-h-full w-full flex-row items-stretch overflow-hidden">
-            <Sidebar />
-
-            <div className="relative flex min-w-0 flex-1 flex-col">
-              <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
-                <Outlet />
-              </main>
-            </div>
-          </div>
-        </JazzAndAuth>
+        <ConfirmDialogProvider>
+          <JazzAndAuth>
+            <LayoutContent />
+          </JazzAndAuth>
+        </ConfirmDialogProvider>
       </TooltipProvider>
     </JotaiProvider>
+  )
+}
+
+function LayoutContent() {
+  return (
+    <>
+      <Toaster expand={false} />
+      <div className="flex min-h-full size-full flex-row items-stretch overflow-hidden">
+        <Sidebar />
+        <Shortcut />
+        <Onboarding />
+
+        <MainContent />
+      </div>
+    </>
+  )
+}
+
+function MainContent() {
+  return (
+    <div className="relative flex min-w-0 flex-1 flex-col">
+      <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
+        <Outlet />
+      </main>
+    </div>
   )
 }
