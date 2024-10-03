@@ -18,9 +18,7 @@ import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 import { SignInButton, useAuth, useUser } from "@clerk/tanstack-start"
 import { Link, useLocation } from "@tanstack/react-router"
 import { ShortcutKey } from "@shared/minimal-tiptap/components/shortcut-key"
-
-// TODO: migrate
-// import { Feedback } from "./feedback"
+import { Feedback } from "./feedback"
 
 export const ProfileSection: React.FC = () => {
   const { user, isSignedIn } = useUser()
@@ -58,8 +56,8 @@ export const ProfileSection: React.FC = () => {
           signOut={signOut}
           setShowShortcut={setShowShortcut}
         />
-        // TODO: migrate
-        {/* <Feedback /> */}
+        {/* TODO: migrate */}
+        <Feedback />
       </div>
     </div>
   )

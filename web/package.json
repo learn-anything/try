@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/tanstack-start": "0.4.1",
     "@clerk/themes": "^2.1.35",
+    "@hookform/resolvers": "^3.9.0",
     "@nothing-but/force-graph": "^0.9.5",
     "@nothing-but/utils": "^0.17.0",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -66,13 +67,17 @@
     "nuqs": "^1.19.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
+    "ronin": "^4.3.1",
     "slugify": "^1.6.6",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
-    "vinxi": "0.4.3"
+    "vinxi": "0.4.3",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@ronin/learn-anything": "^0.0.0-3455039028838",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { storeImageFn } from "@shared/actions"
+import { ZodError } from "zod"
 
 interface ImageEditBlockProps extends React.HTMLAttributes<HTMLDivElement> {
   editor: Editor
@@ -18,6 +20,8 @@ const ImageEditBlock = ({
 }: ImageEditBlockProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [link, setLink] = React.useState<string>("")
+  const [isUploading, setIsUploading] = React.useState<boolean>(false)
+  const [error, setError] = React.useState<string | null>(null)
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -30,19 +34,47 @@ const ImageEditBlock = ({
     close()
   }
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (!files) return
+    if (!files || files.length === 0) return
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const src = e.target?.result as string
-      editor.chain().focus().setImage({ src }).run()
+    setIsUploading(true)
+    setError(null)
+
+    const formData = new FormData()
+    formData.append("file", files[0])
+
+    try {
+      const response = await storeImageFn(formData)
+
+      editor
+        .chain()
+        .setImage({ src: response.fileModel.content.src })
+        .focus()
+        .run()
+      close()
+    } catch (error) {
+      if (error instanceof Error) {
+        try {
+          const errors = JSON.parse(error.message)
+          if (errors.body.name === "ZodError") {
+            setError(
+              (errors.body as ZodError).issues
+                .map((issue) => issue.message)
+                .join(", "),
+            )
+          } else {
+            setError(error.message)
+          }
+        } catch (parseError) {
+          setError(error.message)
+        }
+      } else {
+        setError("An unknown error occurred")
+      }
+    } finally {
+      setIsUploading(false)
     }
-
-    reader.readAsDataURL(files[0])
-
-    close()
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -70,17 +102,21 @@ const ImageEditBlock = ({
             </Button>
           </div>
         </div>
-        <Button className="w-full" onClick={handleClick}>
-          Upload from your computer
+        <Button className="w-full" onClick={handleClick} disabled={isUploading}>
+          {isUploading ? "Uploading..." : "Upload from your computer"}
         </Button>
         <input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/gif,image/webp"
           ref={fileInputRef}
-          multiple
           className="hidden"
           onChange={handleFile}
         />
+        {error && (
+          <div className="text-destructive text-sm bg-destructive/10 p-2 rounded">
+            {error}
+          </div>
+        )}
       </div>
     </form>
   )
