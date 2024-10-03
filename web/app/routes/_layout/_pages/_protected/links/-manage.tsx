@@ -1,16 +1,21 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { LinkForm } from "./-link-form"
-import { useNavigate, useSearch } from "@tanstack/react-router"
+import { useSearch } from "@tanstack/react-router"
+import { useAwaitableNavigate } from "~/hooks/use-awaitable-navigate"
 
 interface LinkManageProps {}
 
 const LinkManage: React.FC<LinkManageProps> = () => {
   const { create } = useSearch({ from: "/_layout/_pages/_protected/links/" })
-  const navigate = useNavigate()
+  const awaitableNavigate = useAwaitableNavigate()
 
-  const handleFormClose = () => {
-    navigate({ to: "/links", search: { create: undefined }, replace: true })
+  const handleFormClose = async () => {
+    awaitableNavigate({
+      to: "/links",
+      search: { create: undefined },
+      replace: true,
+    })
   }
 
   return (

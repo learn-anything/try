@@ -16,7 +16,8 @@ import { PersonalLink } from "@/lib/schema"
 import { ID } from "jazz-tools"
 import { globalLinkFormExceptionRefsAtom } from "./-link-form"
 import { useLinkActions } from "~/hooks/actions/use-link-actions"
-import { useNavigate, useSearch } from "@tanstack/react-router"
+import { useSearch } from "@tanstack/react-router"
+import { useAwaitableNavigate } from "~/hooks/use-awaitable-navigate"
 
 interface ToolbarButtonProps
   extends React.ComponentPropsWithoutRef<typeof Button> {
@@ -60,7 +61,7 @@ export const LinkBottomBar: React.FC = () => {
   const { create: createMode, editId } = useSearch({
     from: "/_layout/_pages/_protected/links/",
   })
-  const navigate = useNavigate()
+  const awaitableNavigate = useAwaitableNavigate()
   const [, setGlobalLinkFormExceptionRefsAtom] = useAtom(
     globalLinkFormExceptionRefsAtom,
   )
@@ -81,11 +82,11 @@ export const LinkBottomBar: React.FC = () => {
   const confirm = useConfirm()
 
   const handleCreateMode = React.useCallback(() => {
-    navigate({
+    awaitableNavigate({
       to: "/links",
       search: { create: !createMode, editId: undefined },
     })
-  }, [createMode, navigate])
+  }, [createMode, awaitableNavigate])
 
   const exceptionRefs = React.useMemo(
     () => [
@@ -132,7 +133,8 @@ export const LinkBottomBar: React.FC = () => {
 
     if (result) {
       deleteLink(me, personalLink)
-      navigate({
+
+      awaitableNavigate({
         to: "/links",
         search: { create: undefined, editId: undefined },
       })
@@ -156,7 +158,7 @@ export const LinkBottomBar: React.FC = () => {
             <ToolbarButton
               icon={"ArrowLeft"}
               onClick={() => {
-                navigate({
+                awaitableNavigate({
                   to: "/links",
                   search: { create: undefined, editId: undefined },
                 })

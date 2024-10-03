@@ -25,13 +25,13 @@ import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { FancySwitch } from "@omit/react-fancy-switch"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
-import { useNavigate, useSearch } from "@tanstack/react-router"
+import { useSearch } from "@tanstack/react-router"
+import { useAwaitableNavigate } from "~/hooks/use-awaitable-navigate"
 
 const ALL_STATES = [
   { label: "All", value: "all", icon: "List", className: "text-foreground" },
   ...LEARNING_STATES,
 ]
-const ALL_STATES_STRING = ALL_STATES.map((ls) => ls.value)
 
 export const learningStateAtom = atom<string>("all")
 
@@ -69,20 +69,21 @@ export const LinkHeader = React.memo(() => {
 LinkHeader.displayName = "LinkHeader"
 
 const LearningTab = React.memo(() => {
-  const navigate = useNavigate()
+  const awaitableNavigate = useAwaitableNavigate()
   const [activeTab, setActiveTab] = useAtom(learningStateAtom)
   const { state: activeState } = useSearch({
     from: "/_layout/_pages/_protected/links/",
   })
 
   const handleTabChange = React.useCallback(
-    (value: string) => {
+    async (value: string) => {
       if (value !== activeTab) {
-        setActiveTab(value)
-        navigate({
+        await awaitableNavigate({
           to: "/links",
           search: { state: value as LearningStateValue },
         })
+
+        setActiveTab(value)
       }
     },
     [activeTab, setActiveTab],
