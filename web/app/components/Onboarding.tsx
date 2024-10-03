@@ -13,7 +13,7 @@ export function Onboarding() {
   const [hasVisited, setHasVisited] = useAtom(hasVisitedAtom)
   const [isFetching, setIsFetching] = React.useState(true)
   const confirm = useConfirm()
-  const { isLoaded, isSignedIn } = useUser()
+  const { isLoaded } = useUser()
 
   React.useEffect(() => {
     const loadUser = async () => {
@@ -27,10 +27,10 @@ export function Onboarding() {
       }
     }
 
-    if (!hasVisited && pathname !== "/" && isLoaded && isSignedIn) {
+    if (!hasVisited && pathname !== "/" && isLoaded) {
       loadUser()
     }
-  }, [hasVisited, pathname, isLoaded, isSignedIn])
+  }, [hasVisited, pathname, isLoaded])
 
   const showOnboardingDialog = async (isExistingUser: boolean) => {
     const result = await confirm({

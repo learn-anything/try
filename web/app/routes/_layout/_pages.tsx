@@ -8,6 +8,8 @@ import { TooltipProvider } from "~/components/ui/tooltip"
 import { JazzAndAuth } from "~/lib/providers/jazz-provider"
 import { Shortcut } from "~/components/shortcut/shortcut"
 import { Onboarding } from "~/components/Onboarding"
+import { GlobalKeyboardHandler } from "~/components/GlobalKeyboardHandler"
+import { CommandPalette } from "~/components/command-palette/command-palette"
 
 export const Route = createFileRoute("/_layout/_pages")({
   component: PagesLayout,
@@ -34,6 +36,8 @@ function LayoutContent() {
       <div className="flex min-h-full size-full flex-row items-stretch overflow-hidden">
         <Sidebar />
         <Shortcut />
+        <GlobalKeyboardHandler />
+        <CommandPalette />
         <Onboarding />
 
         <MainContent />

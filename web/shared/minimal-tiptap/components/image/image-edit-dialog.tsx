@@ -1,7 +1,7 @@
+import * as React from "react"
 import type { Editor } from "@tiptap/react"
 import type { VariantProps } from "class-variance-authority"
 import type { toggleVariants } from "@/components/ui/toggle"
-import { useState } from "react"
 import { ImageIcon } from "@radix-ui/react-icons"
 import { ToolbarButton } from "../toolbar-button"
 import {
@@ -19,7 +19,7 @@ interface ImageEditDialogProps extends VariantProps<typeof toggleVariants> {
 }
 
 const ImageEditDialog = ({ editor, size, variant }: ImageEditDialogProps) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = React.useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

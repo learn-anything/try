@@ -1,4 +1,4 @@
-import React from "react"
+import * as React from "react"
 import { Editor as CoreEditor } from "@tiptap/core"
 import { Editor } from "@tiptap/react"
 import { EditorState } from "@tiptap/pm/state"

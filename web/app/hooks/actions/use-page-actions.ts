@@ -1,10 +1,10 @@
-import { useCallback } from "react"
+import * as React from "react"
 import { toast } from "sonner"
 import { LaAccount, PersonalPage } from "@/lib/schema"
 import { ID } from "jazz-tools"
 
 export const usePageActions = () => {
-  const newPage = useCallback((me: LaAccount): PersonalPage => {
+  const newPage = React.useCallback((me: LaAccount): PersonalPage => {
     const newPersonalPage = PersonalPage.create(
       { public: false, createdAt: new Date(), updatedAt: new Date() },
       { owner: me._owner },
@@ -13,7 +13,7 @@ export const usePageActions = () => {
     return newPersonalPage
   }, [])
 
-  const deletePage = useCallback(
+  const deletePage = React.useCallback(
     (me: LaAccount, pageId: ID<PersonalPage>): void => {
       if (!me.root?.personalPages) return
 
