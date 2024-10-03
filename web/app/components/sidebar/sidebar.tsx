@@ -67,7 +67,7 @@ const SidebarItem: React.FC<SidebarItemProps> = React.memo(
       >
         <Link
           className="text-secondary-foreground flex h-8 grow items-center truncate rounded-md pl-1.5 pr-1 text-sm font-medium"
-          href={url}
+          to={url}
           onClick={onClick}
         >
           {icon && (
@@ -96,12 +96,12 @@ const LogoAndSearch: React.FC = React.memo(() => {
   return (
     <div className="px-3">
       <div className="mt-2 flex h-10 max-w-full items-center">
-        <Link href="/" className="px-2">
+        <Link to="/" className="px-2">
           <LogoIcon className="size-7" />
         </Link>
         <div className="flex min-w-2 grow flex-row" />
         {pathname === "/search" ? (
-          <Link href="/">
+          <Link to="/">
             <Button
               size="sm"
               variant="secondary"

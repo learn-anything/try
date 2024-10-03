@@ -64,7 +64,7 @@ const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
       )}
     >
       <Link
-        href="/links"
+        to="/links"
         className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
       >
         <p className="flex w-full items-center text-sm font-medium sm:text-xs">

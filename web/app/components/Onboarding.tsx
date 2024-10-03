@@ -4,22 +4,22 @@ import { atomWithStorage } from "jotai/utils"
 import { useConfirm } from "@omit/react-confirm-dialog"
 import { useLocation } from "@tanstack/react-router"
 import { isExistingUserFn } from "~/actions"
-import { useUser } from "@clerk/tanstack-start"
+import { useAuth } from "@clerk/tanstack-start"
 
 const hasVisitedAtom = atomWithStorage("hasVisitedLearnAnything", false)
 
 export function Onboarding() {
   const { pathname } = useLocation()
-  const [hasVisited, setHasVisited] = useAtom(hasVisitedAtom)
+  const [hasVisited] = useAtom(hasVisitedAtom)
   const [isFetching, setIsFetching] = React.useState(true)
-  const confirm = useConfirm()
-  const { isLoaded } = useUser()
+  const [isExisting, setIsExisting] = React.useState(false)
+  const { isLoaded, isSignedIn } = useAuth()
 
   React.useEffect(() => {
     const loadUser = async () => {
       try {
         const existingUser = await isExistingUserFn()
-        showOnboardingDialog(existingUser)
+        setIsExisting(existingUser)
       } catch (error) {
         console.error("Error loading user:", error)
       } finally {
@@ -27,12 +27,25 @@ export function Onboarding() {
       }
     }
 
-    if (!hasVisited && pathname !== "/" && isLoaded) {
+    if (!hasVisited && pathname !== "/" && isLoaded && isSignedIn) {
       loadUser()
     }
-  }, [hasVisited, pathname, isLoaded])
+  }, [hasVisited, pathname, isLoaded, isSignedIn])
 
-  const showOnboardingDialog = async (isExistingUser: boolean) => {
+  if (hasVisited || isFetching) return null
+
+  return <OnboardingContent isExistingUser={isExisting} />
+}
+
+function OnboardingContent({ isExistingUser }: { isExistingUser: boolean }) {
+  const [, setHasVisited] = useAtom(hasVisitedAtom)
+  const confirm = useConfirm()
+
+  React.useEffect(() => {
+    showOnboardingDialog()
+  }, [])
+
+  const showOnboardingDialog = async () => {
     const result = await confirm({
       title: "Welcome to Learn Anything!",
       alertDialogDescription: {
@@ -90,8 +103,6 @@ export function Onboarding() {
       setHasVisited(true)
     }
   }
-
-  if (hasVisited || isFetching) return null
 
   return null
 }

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { isModKey, isTextInput } from "@/lib/utils"
+import { isModKey, isServer, isTextInput } from "@/lib/utils"
 
 export type KeyFilter = ((event: KeyboardEvent) => boolean) | string
 export type Options = { allowInInput?: boolean }
@@ -13,7 +13,7 @@ let callbacks: RegisteredCallback[] = []
 let isInitialized = false
 
 const initializeKeyboardListeners = () => {
-  if (typeof window === "undefined" || isInitialized) return
+  if (isServer() || isInitialized) return
 
   let imeOpen = false
 

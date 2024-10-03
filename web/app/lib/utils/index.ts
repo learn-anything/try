@@ -24,6 +24,10 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled
 }
 
+export const isClient = () => typeof window !== "undefined"
+
+export const isServer = () => !isClient()
+
 const inputs = ["input", "select", "button", "textarea"] // detect if node is a text input element
 
 export function isTextInput(element: Element): boolean {

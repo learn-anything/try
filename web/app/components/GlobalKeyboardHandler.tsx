@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useKeyDown, KeyFilter, Options } from "@/hooks/use-key-down"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
-import { isModKey } from "@/lib/utils"
+import { isModKey, isServer } from "@/lib/utils"
 import { useAtom } from "jotai"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
 import { useAuth } from "@clerk/tanstack-start"
@@ -33,7 +33,7 @@ const SEQUENCES: Sequence = {
 const MAX_SEQUENCE_TIME = 1000
 
 export function GlobalKeyboardHandler() {
-  if (typeof window === "undefined") {
+  if (isServer()) {
     return null
   }
 

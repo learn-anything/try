@@ -172,7 +172,7 @@ const MenuLink: React.FC<MenuLinkProps> = ({
   const IconComponent = typeof icon === "string" ? icons[icon] : icon
   return (
     <DropdownMenuItem asChild>
-      <Link className="cursor-pointer" href={href}>
+      <Link className="cursor-pointer" to={href}>
         <div
           className={cn("relative flex flex-1 items-center gap-2", iconClass)}
         >
