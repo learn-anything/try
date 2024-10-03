@@ -70,7 +70,6 @@ export function Feedback() {
       setOpen(false)
       toast.success("Feedback sent")
     } catch (error) {
-      console.error(error)
       toast.error("Failed to send feedback")
     } finally {
       setIsPending(false)
