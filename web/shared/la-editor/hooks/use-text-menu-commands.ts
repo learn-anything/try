@@ -1,32 +1,32 @@
+import * as React from "react"
 import { Editor } from "@tiptap/react"
-import { useCallback } from "react"
 
 export const useTextmenuCommands = (editor: Editor) => {
-  const onBold = useCallback(
+  const onBold = React.useCallback(
     () => editor.chain().focus().toggleBold().run(),
     [editor],
   )
-  const onItalic = useCallback(
+  const onItalic = React.useCallback(
     () => editor.chain().focus().toggleItalic().run(),
     [editor],
   )
-  const onStrike = useCallback(
+  const onStrike = React.useCallback(
     () => editor.chain().focus().toggleStrike().run(),
     [editor],
   )
-  const onCode = useCallback(
+  const onCode = React.useCallback(
     () => editor.chain().focus().toggleCode().run(),
     [editor],
   )
-  const onCodeBlock = useCallback(
+  const onCodeBlock = React.useCallback(
     () => editor.chain().focus().toggleCodeBlock().run(),
     [editor],
   )
-  const onQuote = useCallback(
+  const onQuote = React.useCallback(
     () => editor.chain().focus().toggleBlockquote().run(),
     [editor],
   )
-  const onLink = useCallback(
+  const onLink = React.useCallback(
     (url: string, inNewTab?: boolean) =>
       editor
         .chain()

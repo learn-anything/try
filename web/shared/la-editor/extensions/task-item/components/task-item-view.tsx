@@ -1,6 +1,6 @@
+import * as React from "react"
 import { NodeViewContent, Editor, NodeViewWrapper } from "@tiptap/react"
 import { Icon } from "../../../components/ui/icon"
-import { useCallback } from "react"
 import { Node as ProseMirrorNode } from "@tiptap/pm/model"
 import { Node } from "@tiptap/core"
 
@@ -17,7 +17,7 @@ export const TaskItemView: React.FC<TaskItemProps> = ({
   editor,
   extension,
 }) => {
-  const handleChange = useCallback(
+  const handleChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const checked = event.target.checked
 

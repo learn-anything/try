@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react"
+import * as React from "react"
 import { isClient } from "~/lib/utils"
 
 export function useTouchSensor() {
-  const [isTouchDevice, setIsTouchDevice] = useState(false)
+  const [isTouchDevice, setIsTouchDevice] = React.useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const detectTouch = () => {
       setIsTouchDevice(
         isClient() &&

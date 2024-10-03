@@ -1,12 +1,12 @@
+import * as React from "react"
 import { isNumber, NodeViewProps, NodeViewWrapper } from "@tiptap/react"
-import { useMemo } from "react"
 import { useImageLoad } from "../../../hooks/use-image-load"
 import { cn } from "@/lib/utils"
 
 const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
   const imgSize = useImageLoad(node.attrs.src)
 
-  const paddingBottom = useMemo(() => {
+  const paddingBottom = React.useMemo(() => {
     if (!imgSize.width || !imgSize.height) {
       return 0
     }

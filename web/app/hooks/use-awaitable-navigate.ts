@@ -1,6 +1,6 @@
+import * as React from "react"
 import type { NavigateOptions } from "@tanstack/react-router"
 import { useLocation, useNavigate } from "@tanstack/react-router"
-import React, { useTransition } from "react"
 
 type Resolve = (value?: unknown) => void
 
@@ -12,7 +12,7 @@ export const useAwaitableNavigate = () => {
     resolveFunctionsRef.current.forEach((resolve) => resolve())
     resolveFunctionsRef.current.splice(0, resolveFunctionsRef.current.length)
   }
-  const [_, startTransition] = useTransition()
+  const [_, startTransition] = React.useTransition()
 
   React.useEffect(() => {
     resolveAll()
