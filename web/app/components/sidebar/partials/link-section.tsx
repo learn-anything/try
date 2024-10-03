@@ -1,7 +1,8 @@
-import React from "react"
+import * as React from "react"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
+// TODO: migrate
 // import { useQueryState, parseAsStringLiteral } from "nuqs"
 import { LEARNING_STATES } from "@/lib/constants"
 import { useLocation } from "@tanstack/react-router"
@@ -44,6 +45,7 @@ interface LinkSectionHeaderProps {
 
 const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
   const { pathname } = useLocation()
+  // TODO: migrate
   //   const [state] = useQueryState(
   //     "state",
   //     parseAsStringLiteral(ALL_STATES_STRING),
@@ -82,6 +84,7 @@ interface ListProps {
 
 const List: React.FC<ListProps> = ({ personalLinks }) => {
   const { pathname } = useLocation()
+  // TODO: migrate
   //   const [state] = useQueryState(
   //     "state",
   //     parseAsStringLiteral(LEARNING_STATES.map((ls) => ls.value)),

@@ -3,10 +3,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { GraphData } from "~/lib/constants"
-import { Autocomplete } from "~/components/routes/landing/Autocomplete"
-import { ForceGraphClient } from "~/components/routes/landing/ForceGraphClient"
+import { ForceGraphClient } from "./-components/force-graph-client"
+import { Autocomplete } from "./-components/autocomplete"
 
-export const Route = createFileRoute("/_layout/")({
+export const Route = createFileRoute("/_layout/(landing)/")({
   component: LandingComponent,
 })
 

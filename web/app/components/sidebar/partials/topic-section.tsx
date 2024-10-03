@@ -1,4 +1,4 @@
-import React from "react"
+import * as React from "react"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"

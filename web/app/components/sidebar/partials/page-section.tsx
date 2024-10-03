@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import * as React from "react"
 import { useAtom } from "jotai"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
@@ -145,7 +145,7 @@ interface PageListProps {
 const PageList: React.FC<PageListProps> = ({ personalPages, sort, show }) => {
   const { pathname } = useLocation()
 
-  const sortedPages = useMemo(() => {
+  const sortedPages = React.useMemo(() => {
     return [...personalPages]
       .sort((a, b) => {
         if (sort === "title") {

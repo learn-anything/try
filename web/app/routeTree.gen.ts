@@ -14,8 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
-import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutPagesImport } from './routes/_layout/_pages'
+import { Route as LayoutlandingIndexImport } from './routes/_layout/(landing)/index'
 import { Route as LayoutPagesProtectedImport } from './routes/_layout/_pages/_protected'
 import { Route as LayoutauthAuthImport } from './routes/_layout/(auth)/_auth'
 import { Route as LayoutPagesProtectedTestingImport } from './routes/_layout/_pages/_protected/testing'
@@ -39,13 +39,13 @@ const LayoutauthRoute = LayoutauthImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutIndexRoute = LayoutIndexImport.update({
-  path: '/',
+const LayoutPagesRoute = LayoutPagesImport.update({
+  id: '/_pages',
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutPagesRoute = LayoutPagesImport.update({
-  id: '/_pages',
+const LayoutlandingIndexRoute = LayoutlandingIndexImport.update({
+  path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -98,13 +98,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPagesImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/': {
-      id: '/_layout/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof LayoutIndexImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/(auth)': {
       id: '/_layout/'
       path: '/'
@@ -125,6 +118,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof LayoutPagesProtectedImport
       parentRoute: typeof LayoutPagesImport
+    }
+    '/_layout/(landing)/': {
+      id: '/_layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutlandingIndexImport
+      parentRoute: typeof LayoutImport
     }
     '/_layout/_pages/(topic)/$': {
       id: '/_layout/_pages/$'
@@ -212,14 +212,14 @@ const LayoutauthRouteWithChildren = LayoutauthRoute._addFileChildren(
 
 interface LayoutRouteChildren {
   LayoutPagesRoute: typeof LayoutPagesRouteWithChildren
-  LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutauthRoute: typeof LayoutauthRouteWithChildren
+  LayoutlandingIndexRoute: typeof LayoutlandingIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutPagesRoute: LayoutPagesRouteWithChildren,
-  LayoutIndexRoute: LayoutIndexRoute,
   LayoutauthRoute: LayoutauthRouteWithChildren,
+  LayoutlandingIndexRoute: LayoutlandingIndexRoute,
 }
 
 const LayoutRouteWithChildren =
@@ -227,7 +227,7 @@ const LayoutRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutPagesProtectedRouteWithChildren
-  '/': typeof LayoutauthAuthRouteWithChildren
+  '/': typeof LayoutlandingIndexRoute
   '/$': typeof LayoutPagestopicSplatRoute
   '/testing': typeof LayoutPagesProtectedTestingRoute
   '/sign-in/$': typeof LayoutauthAuthSignInSplatRoute
@@ -236,7 +236,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof LayoutPagesProtectedRouteWithChildren
-  '/': typeof LayoutauthAuthRouteWithChildren
+  '/': typeof LayoutlandingIndexRoute
   '/$': typeof LayoutPagestopicSplatRoute
   '/testing': typeof LayoutPagesProtectedTestingRoute
   '/sign-in/$': typeof LayoutauthAuthSignInSplatRoute
@@ -247,7 +247,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/_pages': typeof LayoutPagesRouteWithChildren
-  '/_layout/': typeof LayoutauthRouteWithChildren
+  '/_layout/': typeof LayoutlandingIndexRoute
   '/_layout/_auth': typeof LayoutauthAuthRouteWithChildren
   '/_layout/_pages/_protected': typeof LayoutPagesProtectedRouteWithChildren
   '/_layout/_pages/$': typeof LayoutPagestopicSplatRoute
@@ -315,11 +315,8 @@ export const routeTree = rootRoute
       ]
     },
     "/_layout/": {
-      "filePath": "_layout/(auth)",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/_auth"
-      ]
+      "filePath": "_layout/(landing)/index.tsx",
+      "parent": "/_layout"
     },
     "/_layout/_auth": {
       "filePath": "_layout/(auth)/_auth.tsx",

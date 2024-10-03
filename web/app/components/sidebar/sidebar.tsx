@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { useMedia } from "@/hooks/use-media"
 import { useAtom } from "jotai"
@@ -15,6 +13,8 @@ import { LinkSection } from "./partials/link-section"
 import { PageSection } from "./partials/page-section"
 import { TopicSection } from "./partials/topic-section"
 import { ProfileSection } from "./partials/profile-section"
+
+// TODO: migrate
 // import { TaskSection } from "./partial/task-section"
 // import { JournalSection } from "./partial/journal-section"
 
@@ -144,6 +144,7 @@ const SidebarContent: React.FC = React.memo(() => {
         <div className="h-2 shrink-0" />
         {me._type === "Account" && <LinkSection pathname={pathname} />}
         {me._type === "Account" && <TopicSection pathname={pathname} />}
+        {/* TODO: migrate */}
         {/* {me._type === "Account" && <JournalSection />} */}
         {/* {me._type === "Account" && <TaskSection pathname={pathname} />} */}
         {me._type === "Account" && <PageSection pathname={pathname} />}

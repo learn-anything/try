@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { useAtom } from "jotai"
 import { icons } from "lucide-react"
@@ -16,10 +14,12 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { showShortcutAtom } from "@/components/shortcut/shortcut"
-import { ShortcutKey } from "@/components/minimal-tiptap/components/shortcut-key"
 import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 import { SignInButton, useAuth, useUser } from "@clerk/tanstack-start"
 import { Link, useLocation } from "@tanstack/react-router"
+import { ShortcutKey } from "@shared/minimal-tiptap/components/shortcut-key"
+
+// TODO: migrate
 // import { Feedback } from "./feedback"
 
 export const ProfileSection: React.FC = () => {
@@ -58,6 +58,7 @@ export const ProfileSection: React.FC = () => {
           signOut={signOut}
           setShowShortcut={setShowShortcut}
         />
+        // TODO: migrate
         {/* <Feedback /> */}
       </div>
     </div>

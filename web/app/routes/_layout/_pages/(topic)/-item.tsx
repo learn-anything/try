@@ -88,7 +88,7 @@ export const LinkItem = React.memo(
             action: {
               label: "Go to list",
               onClick: () => {
-                // TODO: Implement this
+                // TODO: migrate
                 // navigate({
                 //   to: "/links",
                 // }),
@@ -232,7 +232,7 @@ export const LinkItem = React.memo(
                     />
 
                     <Link
-                      href={ensureUrlProtocol(link.url)}
+                      to={ensureUrlProtocol(link.url)}
                       target="_blank"
                       onClick={(e) => e.stopPropagation()}
                       className="text-muted-foreground hover:text-primary text-xs"

@@ -1,7 +1,7 @@
-import { SignIn } from '@clerk/tanstack-start'
-import { createFileRoute } from '@tanstack/react-router'
+import { SignIn } from "@clerk/tanstack-start"
+import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute('/_layout/(auth)/_auth/sign-in/$')({
+export const Route = createFileRoute("/_layout/(auth)/_auth/sign-in/$")({
   component: () => <SignInComponent />,
 })
 
@@ -11,8 +11,8 @@ function SignInComponent() {
       <SignIn
         appearance={{
           elements: {
-            formButtonPrimary: 'bg-primary text-primary-foreground',
-            card: 'shadow-none',
+            formButtonPrimary: "bg-primary text-primary-foreground",
+            card: "shadow-none",
           },
         }}
       />
