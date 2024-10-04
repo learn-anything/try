@@ -86,7 +86,7 @@ const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
     )}
   >
     <Link
-      href="/pages"
+      to="/pages"
       className="flex flex-1 items-center justify-start rounded-md px-2 py-1"
     >
       <p className="text-sm sm:text-xs">
