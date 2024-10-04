@@ -1,13 +1,11 @@
 /// <reference types="vite/client" />
 import { getAuth } from "@clerk/tanstack-start/server"
 import type { QueryClient } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
   Outlet,
   ScrollRestoration,
   createRootRouteWithContext,
 } from "@tanstack/react-router"
-import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import {
   Body,
   Head,
@@ -28,6 +26,24 @@ const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
     user,
   }
 })
+
+const TanStackRouterDevtools =
+  process.env.NODE_ENV === "production"
+    ? () => null
+    : React.lazy(() =>
+        import("@tanstack/router-devtools").then((res) => ({
+          default: res.TanStackRouterDevtools,
+        })),
+      )
+
+const ReactQueryDevtools =
+  process.env.NODE_ENV === "production"
+    ? () => null
+    : React.lazy(() =>
+        import("@tanstack/react-query-devtools/production").then((d) => ({
+          default: d.ReactQueryDevtools,
+        })),
+      )
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient

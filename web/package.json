@@ -67,7 +67,7 @@
     "cmdk": "^1.0.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
-    "framer-motion": "^11.11.0",
+    "framer-motion": "^11.11.1",
     "jazz-react": "^0.8.2",
     "jazz-react-auth-clerk": "^0.8.2",
     "jazz-tools": "^0.8.2",
