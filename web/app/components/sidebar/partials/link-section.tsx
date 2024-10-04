@@ -5,11 +5,7 @@ import { cn } from "@/lib/utils"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
 import { LearningStateValue } from "~/lib/constants"
 
-interface LinkSectionProps {
-  pathname: string
-}
-
-export const LinkSection: React.FC<LinkSectionProps> = ({ pathname }) => {
+export const LinkSection: React.FC = () => {
   const { me } = useAccount({ root: { personalLinks: [] } })
 
   if (!me) return null

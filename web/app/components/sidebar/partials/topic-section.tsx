@@ -6,7 +6,7 @@ import { ListOfTopics } from "@/lib/schema"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
 import { Link } from "@tanstack/react-router"
 
-export const TopicSection: React.FC<{ pathname: string }> = ({ pathname }) => {
+export const TopicSection: React.FC = () => {
   const { me } = useAccount({
     root: {
       topicsWantToLearn: [],
