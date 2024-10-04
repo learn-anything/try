@@ -101,11 +101,19 @@ const NewPageButton: React.FC = () => {
   const navigate = useNavigate()
   const { newPage } = usePageActions()
 
-  if (!me) return null
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
 
-  const handleClick = () => {
     const page = newPage(me)
-    navigate({ to: `/pages/${page.id}` })
+
+    if (page.id) {
+      navigate({
+        to: "/pages/$pageId",
+        params: { pageId: page.id },
+        replace: true,
+      })
+    }
   }
 
   return (
@@ -158,29 +166,33 @@ interface PageListItemProps {
   page: PersonalPage
 }
 
-const PageListItem: React.FC<PageListItemProps> = ({ page }) => (
-  <div className="group/reorder-page relative">
-    <div className="group/sidebar-link relative flex min-w-0 flex-1">
-      <Link
-        to={`/pages/${page.id}`}
-        className={cn(
-          "relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
-          "group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground",
-        )}
-        activeProps={{
-          className: "bg-accent text-accent-foreground",
-        }}
-      >
-        <div className="flex max-w-[calc(100%-1rem)] flex-1 items-center gap-1.5 truncate text-sm">
-          <LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
-          <p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">
-            {page.title || "Untitled"}
-          </p>
-        </div>
-      </Link>
+const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
+  return (
+    <div className="group/reorder-page relative">
+      <div className="group/sidebar-link relative flex min-w-0 flex-1">
+        <Link
+          to="/pages/$pageId"
+          params={{ pageId: page.id }}
+          className={cn(
+            "relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
+            "group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground",
+          )}
+          activeOptions={{ exact: true }}
+          activeProps={{
+            className: "bg-accent text-accent-foreground",
+          }}
+        >
+          <div className="flex max-w-[calc(100%-1rem)] flex-1 items-center gap-1.5 truncate text-sm">
+            <LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
+            <p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">
+              {page.title || "Untitled"}
+            </p>
+          </div>
+        </Link>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 interface SubMenuProps<T> {
   icon: keyof typeof icons

@@ -23,6 +23,7 @@ import { Route as LayoutPagesProtectedPagesIndexImport } from './routes/_layout/
 import { Route as LayoutPagesProtectedLinksIndexImport } from './routes/_layout/_pages/_protected/links/index'
 import { Route as LayoutauthAuthSignUpSplatImport } from './routes/_layout/(auth)/_auth.sign-up.$'
 import { Route as LayoutauthAuthSignInSplatImport } from './routes/_layout/(auth)/_auth.sign-in.$'
+import { Route as LayoutPagesProtectedPagesPageIdIndexImport } from './routes/_layout/_pages/_protected/pages/$pageId/index'
 
 // Create Virtual Routes
 
@@ -86,6 +87,12 @@ const LayoutauthAuthSignInSplatRoute = LayoutauthAuthSignInSplatImport.update({
   path: '/sign-in/$',
   getParentRoute: () => LayoutauthAuthRoute,
 } as any)
+
+const LayoutPagesProtectedPagesPageIdIndexRoute =
+  LayoutPagesProtectedPagesPageIdIndexImport.update({
+    path: '/pages/$pageId/',
+    getParentRoute: () => LayoutPagesProtectedRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -168,6 +175,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPagesProtectedPagesIndexImport
       parentRoute: typeof LayoutPagesProtectedImport
     }
+    '/_layout/_pages/_protected/pages/$pageId/': {
+      id: '/_layout/_pages/_protected/pages/$pageId/'
+      path: '/pages/$pageId'
+      fullPath: '/pages/$pageId'
+      preLoaderRoute: typeof LayoutPagesProtectedPagesPageIdIndexImport
+      parentRoute: typeof LayoutPagesProtectedImport
+    }
   }
 }
 
@@ -176,11 +190,14 @@ declare module '@tanstack/react-router' {
 interface LayoutPagesProtectedRouteChildren {
   LayoutPagesProtectedLinksIndexRoute: typeof LayoutPagesProtectedLinksIndexRoute
   LayoutPagesProtectedPagesIndexRoute: typeof LayoutPagesProtectedPagesIndexRoute
+  LayoutPagesProtectedPagesPageIdIndexRoute: typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
 
 const LayoutPagesProtectedRouteChildren: LayoutPagesProtectedRouteChildren = {
   LayoutPagesProtectedLinksIndexRoute: LayoutPagesProtectedLinksIndexRoute,
   LayoutPagesProtectedPagesIndexRoute: LayoutPagesProtectedPagesIndexRoute,
+  LayoutPagesProtectedPagesPageIdIndexRoute:
+    LayoutPagesProtectedPagesPageIdIndexRoute,
 }
 
 const LayoutPagesProtectedRouteWithChildren =
@@ -249,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
   '/links': typeof LayoutPagesProtectedLinksIndexRoute
   '/pages': typeof LayoutPagesProtectedPagesIndexRoute
+  '/pages/$pageId': typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -259,6 +277,7 @@ export interface FileRoutesByTo {
   '/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
   '/links': typeof LayoutPagesProtectedLinksIndexRoute
   '/pages': typeof LayoutPagesProtectedPagesIndexRoute
+  '/pages/$pageId': typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -273,13 +292,30 @@ export interface FileRoutesById {
   '/_layout/_auth/sign-up/$': typeof LayoutauthAuthSignUpSplatRoute
   '/_layout/_pages/_protected/links/': typeof LayoutPagesProtectedLinksIndexRoute
   '/_layout/_pages/_protected/pages/': typeof LayoutPagesProtectedPagesIndexRoute
+  '/_layout/_pages/_protected/pages/$pageId/': typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/$' | '/sign-in/$' | '/sign-up/$' | '/links' | '/pages'
+  fullPaths:
+    | ''
+    | '/'
+    | '/$'
+    | '/sign-in/$'
+    | '/sign-up/$'
+    | '/links'
+    | '/pages'
+    | '/pages/$pageId'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/' | '/$' | '/sign-in/$' | '/sign-up/$' | '/links' | '/pages'
+  to:
+    | ''
+    | '/'
+    | '/$'
+    | '/sign-in/$'
+    | '/sign-up/$'
+    | '/links'
+    | '/pages'
+    | '/pages/$pageId'
   id:
     | '__root__'
     | '/_layout'
@@ -292,6 +328,7 @@ export interface FileRouteTypes {
     | '/_layout/_auth/sign-up/$'
     | '/_layout/_pages/_protected/links/'
     | '/_layout/_pages/_protected/pages/'
+    | '/_layout/_pages/_protected/pages/$pageId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -351,7 +388,8 @@ export const routeTree = rootRoute
       "parent": "/_layout/_pages",
       "children": [
         "/_layout/_pages/_protected/links/",
-        "/_layout/_pages/_protected/pages/"
+        "/_layout/_pages/_protected/pages/",
+        "/_layout/_pages/_protected/pages/$pageId/"
       ]
     },
     "/_layout/_pages/$": {
@@ -372,6 +410,10 @@ export const routeTree = rootRoute
     },
     "/_layout/_pages/_protected/pages/": {
       "filePath": "_layout/_pages/_protected/pages/index.tsx",
+      "parent": "/_layout/_pages/_protected"
+    },
+    "/_layout/_pages/_protected/pages/$pageId/": {
+      "filePath": "_layout/_pages/_protected/pages/$pageId/index.tsx",
       "parent": "/_layout/_pages/_protected"
     }
   }
