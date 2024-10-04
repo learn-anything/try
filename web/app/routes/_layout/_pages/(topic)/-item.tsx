@@ -87,12 +87,10 @@ export const LinkItem = React.memo(
             closeButton: true,
             action: {
               label: "Go to list",
-              onClick: () => {
-                // TODO: migrate
-                // navigate({
-                //   to: "/links",
-                // }),
-              },
+              onClick: () =>
+                navigate({
+                  to: "/links",
+                }),
             },
           }
 

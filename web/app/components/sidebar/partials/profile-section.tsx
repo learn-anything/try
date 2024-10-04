@@ -56,7 +56,6 @@ export const ProfileSection: React.FC = () => {
           signOut={signOut}
           setShowShortcut={setShowShortcut}
         />
-        {/* TODO: migrate */}
         <Feedback />
       </div>
     </div>
