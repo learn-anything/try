@@ -20,6 +20,7 @@ import { Route as LayoutPagesProtectedImport } from './routes/_layout/_pages/_pr
 import { Route as LayoutauthAuthImport } from './routes/_layout/(auth)/_auth'
 import { Route as LayoutPagestopicSplatImport } from './routes/_layout/_pages/(topic)/$'
 import { Route as LayoutPagesProtectedTopicsIndexImport } from './routes/_layout/_pages/_protected/topics/index'
+import { Route as LayoutPagesProtectedSearchIndexImport } from './routes/_layout/_pages/_protected/search/index'
 import { Route as LayoutPagesProtectedProfileIndexImport } from './routes/_layout/_pages/_protected/profile/index'
 import { Route as LayoutPagesProtectedPagesIndexImport } from './routes/_layout/_pages/_protected/pages/index'
 import { Route as LayoutPagesProtectedOnboardingIndexImport } from './routes/_layout/_pages/_protected/onboarding/index'
@@ -72,6 +73,12 @@ const LayoutPagestopicSplatRoute = LayoutPagestopicSplatImport.update({
 const LayoutPagesProtectedTopicsIndexRoute =
   LayoutPagesProtectedTopicsIndexImport.update({
     path: '/topics/',
+    getParentRoute: () => LayoutPagesProtectedRoute,
+  } as any)
+
+const LayoutPagesProtectedSearchIndexRoute =
+  LayoutPagesProtectedSearchIndexImport.update({
+    path: '/search/',
     getParentRoute: () => LayoutPagesProtectedRoute,
   } as any)
 
@@ -210,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPagesProtectedProfileIndexImport
       parentRoute: typeof LayoutPagesProtectedImport
     }
+    '/_layout/_pages/_protected/search/': {
+      id: '/_layout/_pages/_protected/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof LayoutPagesProtectedSearchIndexImport
+      parentRoute: typeof LayoutPagesProtectedImport
+    }
     '/_layout/_pages/_protected/topics/': {
       id: '/_layout/_pages/_protected/topics/'
       path: '/topics'
@@ -234,6 +248,7 @@ interface LayoutPagesProtectedRouteChildren {
   LayoutPagesProtectedOnboardingIndexRoute: typeof LayoutPagesProtectedOnboardingIndexRoute
   LayoutPagesProtectedPagesIndexRoute: typeof LayoutPagesProtectedPagesIndexRoute
   LayoutPagesProtectedProfileIndexRoute: typeof LayoutPagesProtectedProfileIndexRoute
+  LayoutPagesProtectedSearchIndexRoute: typeof LayoutPagesProtectedSearchIndexRoute
   LayoutPagesProtectedTopicsIndexRoute: typeof LayoutPagesProtectedTopicsIndexRoute
   LayoutPagesProtectedPagesPageIdIndexRoute: typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
@@ -244,6 +259,7 @@ const LayoutPagesProtectedRouteChildren: LayoutPagesProtectedRouteChildren = {
     LayoutPagesProtectedOnboardingIndexRoute,
   LayoutPagesProtectedPagesIndexRoute: LayoutPagesProtectedPagesIndexRoute,
   LayoutPagesProtectedProfileIndexRoute: LayoutPagesProtectedProfileIndexRoute,
+  LayoutPagesProtectedSearchIndexRoute: LayoutPagesProtectedSearchIndexRoute,
   LayoutPagesProtectedTopicsIndexRoute: LayoutPagesProtectedTopicsIndexRoute,
   LayoutPagesProtectedPagesPageIdIndexRoute:
     LayoutPagesProtectedPagesPageIdIndexRoute,
@@ -317,6 +333,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof LayoutPagesProtectedOnboardingIndexRoute
   '/pages': typeof LayoutPagesProtectedPagesIndexRoute
   '/profile': typeof LayoutPagesProtectedProfileIndexRoute
+  '/search': typeof LayoutPagesProtectedSearchIndexRoute
   '/topics': typeof LayoutPagesProtectedTopicsIndexRoute
   '/pages/$pageId': typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
@@ -331,6 +348,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof LayoutPagesProtectedOnboardingIndexRoute
   '/pages': typeof LayoutPagesProtectedPagesIndexRoute
   '/profile': typeof LayoutPagesProtectedProfileIndexRoute
+  '/search': typeof LayoutPagesProtectedSearchIndexRoute
   '/topics': typeof LayoutPagesProtectedTopicsIndexRoute
   '/pages/$pageId': typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
@@ -349,6 +367,7 @@ export interface FileRoutesById {
   '/_layout/_pages/_protected/onboarding/': typeof LayoutPagesProtectedOnboardingIndexRoute
   '/_layout/_pages/_protected/pages/': typeof LayoutPagesProtectedPagesIndexRoute
   '/_layout/_pages/_protected/profile/': typeof LayoutPagesProtectedProfileIndexRoute
+  '/_layout/_pages/_protected/search/': typeof LayoutPagesProtectedSearchIndexRoute
   '/_layout/_pages/_protected/topics/': typeof LayoutPagesProtectedTopicsIndexRoute
   '/_layout/_pages/_protected/pages/$pageId/': typeof LayoutPagesProtectedPagesPageIdIndexRoute
 }
@@ -365,6 +384,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/pages'
     | '/profile'
+    | '/search'
     | '/topics'
     | '/pages/$pageId'
   fileRoutesByTo: FileRoutesByTo
@@ -378,6 +398,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/pages'
     | '/profile'
+    | '/search'
     | '/topics'
     | '/pages/$pageId'
   id:
@@ -394,6 +415,7 @@ export interface FileRouteTypes {
     | '/_layout/_pages/_protected/onboarding/'
     | '/_layout/_pages/_protected/pages/'
     | '/_layout/_pages/_protected/profile/'
+    | '/_layout/_pages/_protected/search/'
     | '/_layout/_pages/_protected/topics/'
     | '/_layout/_pages/_protected/pages/$pageId/'
   fileRoutesById: FileRoutesById
@@ -458,6 +480,7 @@ export const routeTree = rootRoute
         "/_layout/_pages/_protected/onboarding/",
         "/_layout/_pages/_protected/pages/",
         "/_layout/_pages/_protected/profile/",
+        "/_layout/_pages/_protected/search/",
         "/_layout/_pages/_protected/topics/",
         "/_layout/_pages/_protected/pages/$pageId/"
       ]
@@ -488,6 +511,10 @@ export const routeTree = rootRoute
     },
     "/_layout/_pages/_protected/profile/": {
       "filePath": "_layout/_pages/_protected/profile/index.tsx",
+      "parent": "/_layout/_pages/_protected"
+    },
+    "/_layout/_pages/_protected/search/": {
+      "filePath": "_layout/_pages/_protected/search/index.tsx",
       "parent": "/_layout/_pages/_protected"
     },
     "/_layout/_pages/_protected/topics/": {

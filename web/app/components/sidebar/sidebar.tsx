@@ -2,7 +2,7 @@ import * as React from "react"
 import { useMedia } from "@/hooks/use-media"
 import { useAtom } from "jotai"
 import { LogoIcon } from "@/components/icons/logo-icon"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { isCollapseAtom } from "@/store/sidebar"
 import { useAccountOrGuest } from "@/lib/providers/jazz-provider"
@@ -100,30 +100,23 @@ const LogoAndSearch: React.FC = React.memo(() => {
           <LogoIcon className="size-7" />
         </Link>
         <div className="flex min-w-2 grow flex-row" />
-        {pathname === "/search" ? (
-          <Link to="/">
-            <Button
-              size="sm"
-              variant="secondary"
-              type="button"
-              className="text-md text-primary/60 font-medium"
-            >
-              ← Back
-            </Button>
-          </Link>
-        ) : (
-          <Link href="/search">
-            <Button
-              size="sm"
-              variant="secondary"
-              aria-label="Search"
-              type="button"
-              className="text-primary/60 flex w-20 items-center justify-start py-4 pl-2"
-            >
-              <LaIcon name="Search" className="mr-2" />
-            </Button>
-          </Link>
-        )}
+        <Link
+          to={pathname === "/search" ? "/" : "/search"}
+          className={cn(
+            buttonVariants({ size: "sm", variant: "secondary" }),
+            "text-primary/60 flex w-20 items-center justify-start py-4 pl-2",
+          )}
+          activeProps={{
+            className: "text-md font-medium",
+          }}
+          aria-label="Search"
+        >
+          {pathname === "/search" ? (
+            "← Back"
+          ) : (
+            <LaIcon name="Search" className="size-4" />
+          )}
+        </Link>
       </div>
     </div>
   )
