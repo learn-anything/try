@@ -6,7 +6,6 @@ import { LinkManage } from "./-manage"
 import { LinkList } from "./-list"
 import { z } from "zod"
 import { fallback, zodSearchValidator } from "@tanstack/router-zod-adapter"
-import { useAuth } from "@clerk/tanstack-start"
 
 const linkSearchSchema = z.object({
   state: fallback(
@@ -25,12 +24,6 @@ export const Route = createFileRoute("/_layout/_pages/_protected/links/")({
 export const isDeleteConfirmShownAtom = atom(false)
 
 function LinkComponent() {
-  const { isLoaded, isSignedIn } = useAuth()
-
-  if (!isLoaded || !isSignedIn) {
-    return null
-  }
-
   return (
     <>
       <LinkHeader />

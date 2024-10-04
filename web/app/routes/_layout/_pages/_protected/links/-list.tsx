@@ -33,7 +33,7 @@ import { useTouchSensor } from "~/hooks/use-touch-sensor"
 import { useActiveItemScroll } from "~/hooks/use-active-item-scroll"
 import { isDeleteConfirmShownAtom } from "."
 import { useLinkActions } from "~/hooks/actions/use-link-actions"
-import { useSearch } from "@tanstack/react-router"
+import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useAwaitableNavigate } from "~/hooks/use-awaitable-navigate"
 
 interface LinkListProps {}
@@ -45,6 +45,7 @@ const measuring: MeasuringConfiguration = {
 }
 
 const LinkList: React.FC<LinkListProps> = () => {
+  const navigate = useNavigate()
   const awaitableNavigate = useAwaitableNavigate()
   const isTouchDevice = useTouchSensor()
   const lastActiveIndexRef = React.useRef<number | null>(null)
@@ -304,8 +305,8 @@ const LinkList: React.FC<LinkListProps> = () => {
                           setKeyboardActiveIndex(lastActiveIndexRef.current)
                         }}
                         index={index}
-                        onItemSelected={async (link) =>
-                          await awaitableNavigate({
+                        onItemSelected={(link) =>
+                          navigate({
                             to: "/links",
                             search: { editId: link.id },
                           })

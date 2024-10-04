@@ -22,6 +22,7 @@ import { useOnClickOutside } from "~/hooks/use-on-click-outside"
 import TopicSelector, {
   topicSelectorAtom,
 } from "~/components/custom/topic-selector"
+import { getMetadata } from "~/actions"
 
 export const globalLinkFormExceptionRefsAtom = atom<
   React.RefObject<HTMLElement>[]
@@ -115,10 +116,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({
   const fetchMetadata = async (url: string) => {
     setIsFetching(true)
     try {
-      const res = await fetch(`/api/metadata?url=${encodeURIComponent(url)}`, {
-        cache: "force-cache",
-      })
-      const data = await res.json()
+      const data = await getMetadata(encodeURIComponent(url))
       setUrlFetched(data.url)
       form.setValue("url", data.url, {
         shouldValidate: true,

@@ -10,7 +10,7 @@ const LinkManage: React.FC<LinkManageProps> = () => {
   const { create } = useSearch({ from: "/_layout/_pages/_protected/links/" })
   const awaitableNavigate = useAwaitableNavigate()
 
-  const handleFormClose = async () => {
+  const handleFormClose = () => {
     awaitableNavigate({
       to: "/links",
       search: { create: undefined },
