@@ -42,8 +42,8 @@ const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({
   topicCount,
 }) => (
   <Link
-    href="/topics"
-    className="flex flex-1 h-9 items-center gap-px rounded-md sm:h-[30px items-center justify-start rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground"
+    to="/topics"
+    className="flex h-9 items-center gap-px rounded-md px-2 py-1 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-0 sm:h-[30px] sm:text-xs"
     activeProps={{
       className: "bg-accent text-accent-foreground",
     }}
@@ -113,6 +113,7 @@ const ListItem: React.FC<ListItemProps> = ({ label, value, count }) => {
             "group-hover/topic-link:bg-accent relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
             le.className,
           )}
+          activeOptions={{ exact: true }}
           activeProps={{
             className: "bg-accent text-accent-foreground",
           }}
