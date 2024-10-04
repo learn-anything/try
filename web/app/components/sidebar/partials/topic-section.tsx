@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { LaIcon } from "@/components/custom/la-icon"
 import { ListOfTopics } from "@/lib/schema"
 import { LEARNING_STATES, LearningStateValue } from "@/lib/constants"
-import { Link, useLocation } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 
 export const TopicSection: React.FC<{ pathname: string }> = ({ pathname }) => {
   const { me } = useAccount({
@@ -20,13 +20,11 @@ export const TopicSection: React.FC<{ pathname: string }> = ({ pathname }) => {
     (me?.root.topicsLearning?.length || 0) +
     (me?.root.topicsLearned?.length || 0)
 
-  const isActive = pathname.startsWith("/topics")
-
   if (!me) return null
 
   return (
     <div className="group/topics flex flex-col gap-px py-2">
-      <TopicSectionHeader topicCount={topicCount} isActive={isActive} />
+      <TopicSectionHeader topicCount={topicCount} />
       <List
         topicsWantToLearn={me.root.topicsWantToLearn}
         topicsLearning={me.root.topicsLearning}
@@ -38,33 +36,25 @@ export const TopicSection: React.FC<{ pathname: string }> = ({ pathname }) => {
 
 interface TopicSectionHeaderProps {
   topicCount: number
-  isActive: boolean
 }
 
 const TopicSectionHeader: React.FC<TopicSectionHeaderProps> = ({
   topicCount,
-  isActive,
 }) => (
-  <div
-    className={cn(
-      "flex h-9 items-center gap-px rounded-md sm:h-[30px]",
-      isActive
-        ? "bg-accent text-accent-foreground"
-        : "hover:bg-accent hover:text-accent-foreground",
-    )}
+  <Link
+    href="/topics"
+    className="flex flex-1 h-9 items-center gap-px rounded-md sm:h-[30px items-center justify-start rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground"
+    activeProps={{
+      className: "bg-accent text-accent-foreground",
+    }}
   >
-    <Link
-      href="/topics"
-      className="flex flex-1 items-center justify-start rounded-md px-2 py-1"
-    >
-      <p className="text-sm sm:text-xs">
-        Topics
-        {topicCount > 0 && (
-          <span className="text-muted-foreground ml-1">{topicCount}</span>
-        )}
-      </p>
-    </Link>
-  </div>
+    <p className="text-sm sm:text-xs">
+      Topics
+      {topicCount > 0 && (
+        <span className="text-muted-foreground ml-1">{topicCount}</span>
+      )}
+    </p>
+  </Link>
 )
 
 interface ListProps {
@@ -78,8 +68,6 @@ const List: React.FC<ListProps> = ({
   topicsLearning,
   topicsLearned,
 }) => {
-  const { pathname } = useLocation()
-
   return (
     <div className="flex flex-col gap-px">
       <ListItem
@@ -87,24 +75,18 @@ const List: React.FC<ListProps> = ({
         count={topicsWantToLearn.length}
         label="To Learn"
         value="wantToLearn"
-        href="#"
-        isActive={pathname === "/me/wantToLearn"}
       />
       <ListItem
         key={topicsLearning.id}
         label="Learning"
         value="learning"
         count={topicsLearning.length}
-        href="#"
-        isActive={pathname === "/me/learning"}
       />
       <ListItem
         key={topicsLearned.id}
         label="Learned"
         value="learned"
         count={topicsLearned.length}
-        href="#"
-        isActive={pathname === "/me/learned"}
       />
     </div>
   )
@@ -113,18 +95,10 @@ const List: React.FC<ListProps> = ({
 interface ListItemProps {
   label: string
   value: LearningStateValue
-  href: string
   count: number
-  isActive: boolean
 }
 
-const ListItem: React.FC<ListItemProps> = ({
-  label,
-  value,
-  href,
-  count,
-  isActive,
-}) => {
+const ListItem: React.FC<ListItemProps> = ({ label, value, count }) => {
   const le = LEARNING_STATES.find((l) => l.value === value)
 
   if (!le) return null
@@ -133,12 +107,15 @@ const ListItem: React.FC<ListItemProps> = ({
     <div className="group/reorder-page relative">
       <div className="group/topic-link relative flex min-w-0 flex-1">
         <Link
-          href={href}
+          to="/topics"
+          search={{ learningState: value }}
           className={cn(
             "group-hover/topic-link:bg-accent relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
-            { "bg-accent text-accent-foreground": isActive },
             le.className,
           )}
+          activeProps={{
+            className: "bg-accent text-accent-foreground",
+          }}
         >
           <div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
             <LaIcon name={le.icon} className="flex-shrink-0 opacity-60" />
