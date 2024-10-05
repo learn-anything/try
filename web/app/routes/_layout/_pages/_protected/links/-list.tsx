@@ -294,8 +294,6 @@ const LinkList: React.FC<LinkListProps> = () => {
                             return undefined
                           }
 
-                          console.log("onPointerMove", index)
-
                           setKeyboardActiveIndex(null)
                           setActiveItemIndex(index)
                         }}
