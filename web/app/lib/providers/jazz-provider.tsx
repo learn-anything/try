@@ -4,6 +4,7 @@ import { useJazzClerkAuth } from "jazz-react-auth-clerk"
 import { useAuth, useClerk } from "@clerk/tanstack-start"
 import { useLocation } from "@tanstack/react-router"
 import { getEnvVariable } from "../utils"
+import { AuthMethod } from "jazz-tools"
 
 const Jazz = createJazzReactApp({
   AccountSchema: LaAccount,
@@ -23,9 +24,11 @@ function assertPeerUrl(
   }
 }
 
-const rawUrl = getEnvVariable("VITE_JAZZ_PEER_URL")
-assertPeerUrl(rawUrl)
-const JAZZ_PEER_URL = rawUrl
+const JAZZ_PEER_URL = (() => {
+  const rawUrl = getEnvVariable("VITE_JAZZ_PEER_URL")
+  assertPeerUrl(rawUrl)
+  return rawUrl
+})()
 
 interface ChildrenProps {
   children: React.ReactNode
@@ -33,30 +36,35 @@ interface ChildrenProps {
 
 export function JazzAndAuth({ children }: ChildrenProps) {
   const { pathname } = useLocation()
-  return pathname === "/" ? (
-    <JazzGuest>{children}</JazzGuest>
-  ) : (
-    <JazzAuth>{children}</JazzAuth>
-  )
+  const Component = pathname === "/" ? JazzGuest : JazzAuth
+  return <Component>{children}</Component>
 }
 
 export function JazzAuth({ children }: ChildrenProps) {
   const clerk = useClerk()
-  const { isLoaded } = useAuth()
+  const { isLoaded, isSignedIn } = useAuth()
   const [authMethod] = useJazzClerkAuth(clerk)
 
-  if (!isLoaded || !authMethod) return null
+  if (!isLoaded) return null
+  if (!isSignedIn) return <JazzGuest>{children}</JazzGuest>
+  if (!authMethod) return null
 
-  return (
-    <Jazz.Provider auth={authMethod || "guest"} peer={JAZZ_PEER_URL}>
-      {children}
-    </Jazz.Provider>
-  )
+  return <JazzProvider auth={authMethod}>{children}</JazzProvider>
 }
 
 export function JazzGuest({ children }: ChildrenProps) {
+  return <JazzProvider auth="guest">{children}</JazzProvider>
+}
+
+function JazzProvider({
+  auth,
+  children,
+}: {
+  auth: AuthMethod | "guest"
+  children: React.ReactNode
+}) {
   return (
-    <Jazz.Provider auth="guest" peer={JAZZ_PEER_URL}>
+    <Jazz.Provider auth={auth} peer={JAZZ_PEER_URL}>
       {children}
     </Jazz.Provider>
   )

@@ -16,6 +16,7 @@ export const Route = createFileRoute("/_layout/_pages/(topic)/$")({
 export const openPopoverForIdAtom = atom<string | null>(null)
 
 export function TopicDetailComponent() {
+  console.log("TopicDetailComponent")
   const params = useParams({ from: "/_layout/_pages/$" })
   const { me } = useAccountOrGuest({ root: { personalLinks: [] } })
 

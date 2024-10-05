@@ -1,3 +1,4 @@
+import * as React from "react"
 import { ID } from "jazz-tools"
 import { icons } from "lucide-react"
 import { PublicGlobalGroup } from "./schema/master/public-group"

@@ -27,7 +27,7 @@ const fetchClerkAuth = createServerFn("GET", async (_, ctx) => {
   }
 })
 
-const TanStackRouterDevtools =
+export const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
     ? () => null
     : React.lazy(() =>
@@ -36,7 +36,7 @@ const TanStackRouterDevtools =
         })),
       )
 
-const ReactQueryDevtools =
+export const ReactQueryDevtools =
   process.env.NODE_ENV === "production"
     ? () => null
     : React.lazy(() =>
@@ -113,9 +113,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </Head>
       <Body>
         {children}
+
+        <React.Suspense>
+          <TanStackRouterDevtools position="bottom-right" />
+          <ReactQueryDevtools buttonPosition="bottom-left" />
+        </React.Suspense>
+
         <ScrollRestoration />
-        <TanStackRouterDevtools position="bottom-right" />
-        <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />
       </Body>
     </Html>
