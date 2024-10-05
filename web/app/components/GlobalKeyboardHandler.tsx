@@ -57,7 +57,6 @@ export function KeyboardHandlerContent() {
     const route = SEQUENCES[sequenceStr]
 
     if (route) {
-      console.log(`Navigating to ${route}...`)
       navigate({
         to: route,
       })

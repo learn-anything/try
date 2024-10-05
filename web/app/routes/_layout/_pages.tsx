@@ -21,20 +21,7 @@ function PagesLayout() {
       <TooltipProvider>
         <ConfirmDialogProvider>
           <JazzAndAuth>
-            <Toaster expand={false} />
-            <div className="flex min-h-full size-full flex-row items-stretch overflow-hidden">
-              <Sidebar />
-              <Shortcut />
-              <GlobalKeyboardHandler />
-              <CommandPalette />
-              <Onboarding />
-
-              <div className="relative flex min-w-0 flex-1 flex-col">
-                <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">
-                  <Outlet />
-                </main>
-              </div>
-            </div>
+            <LayoutContent />
           </JazzAndAuth>
         </ConfirmDialogProvider>
       </TooltipProvider>
@@ -43,7 +30,6 @@ function PagesLayout() {
 }
 
 function LayoutContent() {
-  console.log("LayoutContent")
   return (
     <>
       <Toaster expand={false} />
@@ -61,7 +47,6 @@ function LayoutContent() {
 }
 
 function MainContent() {
-  console.log("MainContent")
   return (
     <div className="relative flex min-w-0 flex-1 flex-col">
       <main className="relative flex flex-auto flex-col place-items-stretch overflow-auto lg:my-2 lg:mr-2 lg:rounded-md lg:border">

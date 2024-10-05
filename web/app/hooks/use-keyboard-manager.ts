@@ -43,7 +43,6 @@ export function useKeyboardManager(sourceId: string) {
 
   const disableKeydown = React.useCallback(
     (disable: boolean) => {
-      console.log(`${sourceId} disable:`, disable)
       setDisableSources((prev) => {
         const next = new Set(prev)
         if (disable) {
