@@ -1,5 +1,5 @@
+import * as React from "react"
 import { useAtom } from "jotai"
-import { useEffect, useCallback } from "react"
 import { keyboardDisableSourcesAtom } from "@/store/keyboard-manager"
 
 const allowedKeys = [
@@ -20,7 +20,7 @@ export function useKeyboardManager(sourceId: string) {
     keyboardDisableSourcesAtom,
   )
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (disableSources.has(sourceId)) {
         if (allowedKeys.includes(event.key)) {
@@ -41,7 +41,7 @@ export function useKeyboardManager(sourceId: string) {
     return () => window.removeEventListener("keydown", handleKeyDown, true)
   }, [disableSources, sourceId, setDisableSources])
 
-  const disableKeydown = useCallback(
+  const disableKeydown = React.useCallback(
     (disable: boolean) => {
       console.log(`${sourceId} disable:`, disable)
       setDisableSources((prev) => {

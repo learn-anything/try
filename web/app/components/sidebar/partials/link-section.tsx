@@ -1,160 +1,106 @@
-import React from "react"
+import * as React from "react"
+import { Link } from "@tanstack/react-router"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
 import { PersonalLinkLists } from "@/lib/schema/personal-link"
-// import { useQueryState, parseAsStringLiteral } from "nuqs"
-import { LEARNING_STATES } from "@/lib/constants"
-import { useLocation } from "@tanstack/react-router"
-import { Link } from "@tanstack/react-router"
+import { LearningStateValue } from "~/lib/constants"
 
-const ALL_STATES = [
-  { label: "All", value: "all", icon: "List", className: "text-foreground" },
-  ...LEARNING_STATES,
-]
-const ALL_STATES_STRING = ALL_STATES.map((ls) => ls.value)
-
-interface LinkSectionProps {
-  pathname: string
-}
-
-export const LinkSection: React.FC<LinkSectionProps> = ({ pathname }) => {
-  const { me } = useAccount({
-    root: {
-      personalLinks: [],
-    },
-  })
+export const LinkSection: React.FC = () => {
+  const { me } = useAccount({ root: { personalLinks: [] } })
 
   if (!me) return null
 
   const linkCount = me.root.personalLinks?.length || 0
-  const isActive = pathname === "/links"
 
   return (
     <div className="group/pages flex flex-col gap-px py-2">
-      <LinkSectionHeader linkCount={linkCount} isActive={isActive} />
-      <List personalLinks={me.root.personalLinks} />
+      <LinkSectionHeader linkCount={linkCount} />
+      <LinkList personalLinks={me.root.personalLinks} />
     </div>
   )
 }
 
 interface LinkSectionHeaderProps {
   linkCount: number
-  isActive: boolean
 }
 
-const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => {
-  const { pathname } = useLocation()
-  //   const [state] = useQueryState(
-  //     "state",
-  //     parseAsStringLiteral(ALL_STATES_STRING),
-  //   )
-  const state = "all"
-  const isLinksActive =
-    pathname.startsWith("/links") && (!state || state === "all")
+const LinkSectionHeader: React.FC<LinkSectionHeaderProps> = ({ linkCount }) => (
+  <Link
+    to="/links"
+    className={cn(
+      "flex h-9 items-center gap-px rounded-md px-2 py-1 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-0 sm:h-[30px] sm:text-xs",
+    )}
+    activeProps={{
+      className: "bg-accent text-accent-foreground",
+    }}
+  >
+    Links
+    {linkCount > 0 && (
+      <span className="text-muted-foreground ml-1">{linkCount}</span>
+    )}
+  </Link>
+)
 
-  return (
-    <div
-      className={cn(
-        "flex h-9 items-center gap-px rounded-md sm:h-[30px]",
-        isLinksActive
-          ? "bg-accent text-accent-foreground"
-          : "hover:bg-accent hover:text-accent-foreground",
-      )}
-    >
-      <Link
-        href="/links"
-        className="flex flex-1 items-center justify-start rounded-md px-2 py-1 focus-visible:outline-none focus-visible:ring-0"
-      >
-        <p className="flex w-full items-center text-sm font-medium sm:text-xs">
-          Links
-          {linkCount > 0 && (
-            <span className="text-muted-foreground ml-1">{linkCount}</span>
-          )}
-        </p>
-      </Link>
-    </div>
-  )
-}
-
-interface ListProps {
+interface LinkListProps {
   personalLinks: PersonalLinkLists
 }
 
-const List: React.FC<ListProps> = ({ personalLinks }) => {
-  const { pathname } = useLocation()
-  //   const [state] = useQueryState(
-  //     "state",
-  //     parseAsStringLiteral(LEARNING_STATES.map((ls) => ls.value)),
-  //   )
-  const state = "all"
-
-  const linkCounts = {
-    wantToLearn: personalLinks.filter(
-      (link) => link?.learningState === "wantToLearn",
-    ).length,
-    learning: personalLinks.filter((link) => link?.learningState === "learning")
-      .length,
-    learned: personalLinks.filter((link) => link?.learningState === "learned")
-      .length,
+const LinkList: React.FC<LinkListProps> = ({ personalLinks }) => {
+  const linkStates: LearningStateValue[] = [
+    "wantToLearn",
+    "learning",
+    "learned",
+  ]
+  const linkLabels: Record<LearningStateValue, string> = {
+    wantToLearn: "To Learn",
+    learning: "Learning",
+    learned: "Learned",
   }
 
-  const isActive = (checkState: string) =>
-    pathname === "/links" && state === checkState
+  const linkCounts = linkStates.reduce(
+    (acc, state) => ({
+      ...acc,
+      [state]: personalLinks.filter((link) => link?.learningState === state)
+        .length,
+    }),
+    {} as Record<LearningStateValue, number>,
+  )
 
   return (
     <div className="flex flex-col gap-px">
-      <ListItem
-        label="To Learn"
-        href="/links?state=wantToLearn"
-        count={linkCounts.wantToLearn}
-        isActive={isActive("wantToLearn")}
-      />
-      <ListItem
-        label="Learning"
-        href="/links?state=learning"
-        count={linkCounts.learning}
-        isActive={isActive("learning")}
-      />
-      <ListItem
-        label="Learned"
-        href="/links?state=learned"
-        count={linkCounts.learned}
-        isActive={isActive("learned")}
-      />
+      {linkStates.map((state) => (
+        <LinkListItem
+          key={state}
+          label={linkLabels[state]}
+          state={state}
+          count={linkCounts[state]}
+        />
+      ))}
     </div>
   )
 }
 
-interface ListItemProps {
+interface LinkListItemProps {
   label: string
-  href: string
+  state: LearningStateValue
   count: number
-  isActive: boolean
 }
 
-const ListItem: React.FC<ListItemProps> = ({
-  label,
-  href,
-  count,
-  isActive,
-}) => (
+const LinkListItem: React.FC<LinkListItemProps> = ({ label, state, count }) => (
   <div className="group/reorder-page relative">
     <div className="group/topic-link relative flex min-w-0 flex-1">
       <Link
-        href={href}
+        to="/links"
+        search={{ state }}
         className={cn(
-          "relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
-          isActive
-            ? "bg-accent text-accent-foreground"
-            : "hover:bg-accent hover:text-accent-foreground",
+          "relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium hover:bg-accent hover:text-accent-foreground sm:h-8",
         )}
+        activeProps={{
+          className: "bg-accent text-accent-foreground",
+        }}
       >
         <div className="flex max-w-full flex-1 items-center gap-1.5 truncate text-sm">
-          <p
-            className={cn(
-              "truncate opacity-95 group-hover/topic-link:opacity-100",
-            )}
-          >
+          <p className="truncate opacity-95 group-hover/topic-link:opacity-100">
             {label}
           </p>
         </div>

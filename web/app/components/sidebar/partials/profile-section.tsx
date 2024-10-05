@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { useAtom } from "jotai"
 import { icons } from "lucide-react"
@@ -16,11 +14,11 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { showShortcutAtom } from "@/components/shortcut/shortcut"
-import { ShortcutKey } from "@/components/minimal-tiptap/components/shortcut-key"
 import { useKeyboardManager } from "@/hooks/use-keyboard-manager"
 import { SignInButton, useAuth, useUser } from "@clerk/tanstack-start"
 import { Link, useLocation } from "@tanstack/react-router"
-// import { Feedback } from "./feedback"
+import { ShortcutKey } from "@shared/minimal-tiptap/components/shortcut-key"
+import { Feedback } from "./feedback"
 
 export const ProfileSection: React.FC = () => {
   const { user, isSignedIn } = useUser()
@@ -58,7 +56,7 @@ export const ProfileSection: React.FC = () => {
           signOut={signOut}
           setShowShortcut={setShowShortcut}
         />
-        {/* <Feedback /> */}
+        <Feedback />
       </div>
     </div>
   )
@@ -173,7 +171,7 @@ const MenuLink: React.FC<MenuLinkProps> = ({
   const IconComponent = typeof icon === "string" ? icons[icon] : icon
   return (
     <DropdownMenuItem asChild>
-      <Link className="cursor-pointer" href={href}>
+      <Link className="cursor-pointer" to={href}>
         <div
           className={cn("relative flex flex-1 items-center gap-2", iconClass)}
         >

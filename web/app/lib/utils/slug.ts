@@ -1,5 +1,4 @@
 import slugify from "slugify"
-import crypto from "crypto"
 
 export function generateUniqueSlug(
   title: string,
@@ -9,7 +8,13 @@ export function generateUniqueSlug(
     lower: true,
     strict: true,
   })
-  const randomSuffix = crypto.randomBytes(4).toString("hex")
+
+  // Web Crypto API
+  const randomValues = new Uint8Array(4)
+  crypto.getRandomValues(randomValues)
+  const randomSuffix = Array.from(randomValues)
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("")
 
   const truncatedSlug = baseSlug.slice(0, Math.min(maxLength, 75) - 9)
 

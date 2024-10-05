@@ -1,4 +1,4 @@
-const SSR = typeof window === "undefined"
+import { isServer } from "."
 
 interface ShortcutKeyResult {
   symbol: string
@@ -35,14 +35,14 @@ export function isModKey(
 }
 
 export function isMac(): boolean {
-  if (SSR) {
+  if (isServer()) {
     return false
   }
   return window.navigator.platform === "MacIntel"
 }
 
 export function isWindows(): boolean {
-  if (SSR) {
+  if (isServer()) {
     return false
   }
   return window.navigator.platform === "Win32"

@@ -1,8 +1,8 @@
 import { ID } from "jazz-tools"
 import { icons } from "lucide-react"
 import { PublicGlobalGroup } from "./schema/master/public-group"
-import Graph from "@/data/graph.json"
 import { getEnvVariable } from "./utils"
+import Graph from "@/data/graph.json"
 
 export type LearningStateValue = "wantToLearn" | "learning" | "learned"
 export type LearningState = {

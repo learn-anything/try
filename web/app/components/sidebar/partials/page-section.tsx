@@ -1,8 +1,9 @@
-import React, { useMemo } from "react"
+import * as React from "react"
 import { useAtom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { useAccount } from "@/lib/providers/jazz-provider"
 import { cn } from "@/lib/utils"
-import { atomWithStorage } from "jotai/utils"
 import { PersonalPage, PersonalPageLists } from "@/lib/schema/personal-page"
 import { Button } from "@/components/ui/button"
 import { LaIcon } from "@/components/custom/la-icon"
@@ -17,9 +18,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { icons } from "lucide-react"
 import { usePageActions } from "~/hooks/actions/use-page-actions"
-import { Link, useLocation, useNavigate } from "@tanstack/react-router"
+import { icons } from "lucide-react"
 
 type SortOption = "title" | "recent"
 type ShowOption = 5 | 10 | 15 | 20 | 0
@@ -45,24 +45,22 @@ const SHOWS: Option<ShowOption>[] = [
 const pageSortAtom = atomWithStorage<SortOption>("pageSort", "title")
 const pageShowAtom = atomWithStorage<ShowOption>("pageShow", 5)
 
-export const PageSection: React.FC<{ pathname?: string }> = ({ pathname }) => {
+export const PageSection: React.FC = () => {
   const { me } = useAccount({
     root: {
       personalPages: [],
     },
   })
-
   const [sort] = useAtom(pageSortAtom)
   const [show] = useAtom(pageShowAtom)
 
   if (!me) return null
 
   const pageCount = me.root.personalPages?.length || 0
-  const isActive = pathname === "/pages"
 
   return (
     <div className="group/pages flex flex-col gap-px py-2">
-      <PageSectionHeader pageCount={pageCount} isActive={isActive} />
+      <PageSectionHeader pageCount={pageCount} />
       <PageList personalPages={me.root.personalPages} sort={sort} show={show} />
     </div>
   )
@@ -70,38 +68,32 @@ export const PageSection: React.FC<{ pathname?: string }> = ({ pathname }) => {
 
 interface PageSectionHeaderProps {
   pageCount: number
-  isActive: boolean
 }
 
-const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
-  pageCount,
-  isActive,
-}) => (
-  <div
+const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({ pageCount }) => (
+  <Link
+    to="/pages"
     className={cn(
-      "flex h-9 items-center gap-px rounded-md sm:h-[30px]",
-      isActive
-        ? "bg-accent text-accent-foreground"
-        : "hover:bg-accent hover:text-accent-foreground",
+      "flex h-9 flex-1 items-center justify-start gap-px rounded-md px-2 py-1",
+      "hover:bg-accent hover:text-accent-foreground sm:h-[30px]",
     )}
+    activeProps={{
+      className: "bg-accent text-accent-foreground",
+    }}
   >
-    <Link
-      href="/pages"
-      className="flex flex-1 items-center justify-start rounded-md px-2 py-1"
-    >
+    <div className="flex grow items-center justify-between">
       <p className="text-sm sm:text-xs">
         Pages
         {pageCount > 0 && (
           <span className="text-muted-foreground ml-1">{pageCount}</span>
         )}
       </p>
-    </Link>
-
-    <div className="flex items-center gap-px pr-2">
-      <ShowAllForm />
-      <NewPageButton />
+      <div className="flex items-center gap-px">
+        <ShowAllForm />
+        <NewPageButton />
+      </div>
     </div>
-  </div>
+  </Link>
 )
 
 const NewPageButton: React.FC = () => {
@@ -109,13 +101,19 @@ const NewPageButton: React.FC = () => {
   const navigate = useNavigate()
   const { newPage } = usePageActions()
 
-  if (!me) return null
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
 
-  const handleClick = () => {
     const page = newPage(me)
-    navigate({
-      to: `/pages/${page.id}`,
-    })
+
+    if (page.id) {
+      navigate({
+        to: "/pages/$pageId",
+        params: { pageId: page.id },
+        replace: true,
+      })
+    }
   }
 
   return (
@@ -124,10 +122,11 @@ const NewPageButton: React.FC = () => {
       variant="ghost"
       aria-label="New Page"
       className={cn(
-        "flex size-5 items-center justify-center p-0.5 shadow-none focus-visible:outline-none focus-visible:ring-0",
+        "flex size-5 items-center justify-center p-0.5 shadow-none",
         "hover:bg-accent-foreground/10",
         "opacity-0 transition-opacity duration-200",
-        "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100 data-[state='open']:opacity-100",
+        "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100",
+        "data-[state='open']:opacity-100 focus-visible:outline-none focus-visible:ring-0",
       )}
       onClick={handleClick}
     >
@@ -143,9 +142,7 @@ interface PageListProps {
 }
 
 const PageList: React.FC<PageListProps> = ({ personalPages, sort, show }) => {
-  const { pathname } = useLocation()
-
-  const sortedPages = useMemo(() => {
+  const sortedPages = React.useMemo(() => {
     return [...personalPages]
       .sort((a, b) => {
         if (sort === "title") {
@@ -159,14 +156,7 @@ const PageList: React.FC<PageListProps> = ({ personalPages, sort, show }) => {
   return (
     <div className="flex flex-col gap-px">
       {sortedPages.map(
-        (page) =>
-          page?.id && (
-            <PageListItem
-              key={page.id}
-              page={page}
-              isActive={pathname === `/pages/${page.id}`}
-            />
-          ),
+        (page) => page?.id && <PageListItem key={page.id} page={page} />,
       )}
     </div>
   )
@@ -174,29 +164,35 @@ const PageList: React.FC<PageListProps> = ({ personalPages, sort, show }) => {
 
 interface PageListItemProps {
   page: PersonalPage
-  isActive: boolean
 }
 
-const PageListItem: React.FC<PageListItemProps> = ({ page, isActive }) => (
-  <div className="group/reorder-page relative">
-    <div className="group/sidebar-link relative flex min-w-0 flex-1">
-      <Link
-        href={`/pages/${page.id}`}
-        className={cn(
-          "group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
-          { "bg-accent text-accent-foreground": isActive },
-        )}
-      >
-        <div className="flex max-w-[calc(100%-1rem)] flex-1 items-center gap-1.5 truncate text-sm">
-          <LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
-          <p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">
-            {page.title || "Untitled"}
-          </p>
-        </div>
-      </Link>
+const PageListItem: React.FC<PageListItemProps> = ({ page }) => {
+  return (
+    <div className="group/reorder-page relative">
+      <div className="group/sidebar-link relative flex min-w-0 flex-1">
+        <Link
+          to="/pages/$pageId"
+          params={{ pageId: page.id }}
+          className={cn(
+            "relative flex h-9 w-full items-center gap-2 rounded-md p-1.5 font-medium sm:h-8",
+            "group-hover/sidebar-link:bg-accent group-hover/sidebar-link:text-accent-foreground",
+          )}
+          activeOptions={{ exact: true }}
+          activeProps={{
+            className: "bg-accent text-accent-foreground",
+          }}
+        >
+          <div className="flex max-w-[calc(100%-1rem)] flex-1 items-center gap-1.5 truncate text-sm">
+            <LaIcon name="FileText" className="flex-shrink-0 opacity-60" />
+            <p className="truncate opacity-95 group-hover/sidebar-link:opacity-100">
+              {page.title || "Untitled"}
+            </p>
+          </div>
+        </Link>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 interface SubMenuProps<T> {
   icon: keyof typeof icons
@@ -255,10 +251,11 @@ const ShowAllForm: React.FC = () => {
           variant="ghost"
           size="sm"
           className={cn(
-            "flex size-5 items-center justify-center p-0.5 shadow-none focus-visible:outline-none focus-visible:ring-0",
+            "flex size-5 items-center justify-center p-0.5 shadow-none",
             "hover:bg-accent-foreground/10",
             "opacity-0 transition-opacity duration-200",
-            "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100 data-[state='open']:opacity-100",
+            "group-hover/pages:opacity-100 group-has-[[data-state='open']]/pages:opacity-100",
+            "data-[state='open']:opacity-100 focus-visible:outline-none focus-visible:ring-0",
           )}
         >
           <LaIcon name="Ellipsis" />
@@ -266,14 +263,14 @@ const ShowAllForm: React.FC = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56">
         <DropdownMenuGroup>
-          <SubMenu<SortOption>
+          <SubMenu
             icon="ArrowUpDown"
             label="Sort"
             options={SORTS}
             currentValue={pagesSorted}
             onSelect={setPagesSorted}
           />
-          <SubMenu<ShowOption>
+          <SubMenu
             icon="Hash"
             label="Show"
             options={SHOWS}

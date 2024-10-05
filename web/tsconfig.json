@@ -16,8 +16,10 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"],
-      "@/*": ["./app/*"]
+      "@/*": ["./app/*"],
+      "@shared/*": ["./shared/*"]
     },
-    "noEmit": true
+    "noEmit": true,
+    "types": ["@ronin/learn-anything"]
   }
 }

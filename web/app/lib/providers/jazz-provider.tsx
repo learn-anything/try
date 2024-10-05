@@ -45,7 +45,7 @@ export function JazzAuth({ children }: ChildrenProps) {
   const { isLoaded } = useAuth()
   const [authMethod] = useJazzClerkAuth(clerk)
 
-  if (!isLoaded) return null
+  if (!isLoaded || !authMethod) return null
 
   return (
     <Jazz.Provider auth={authMethod || "guest"} peer={JAZZ_PEER_URL}>

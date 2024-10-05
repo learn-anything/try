@@ -1,28 +1,48 @@
-import { isModKey, isTextInput } from "@/lib/utils"
 import * as React from "react"
-
-type Callback = (event: KeyboardEvent) => void
+import { isModKey, isServer, isTextInput } from "@/lib/utils"
 
 export type KeyFilter = ((event: KeyboardEvent) => boolean) | string
-
-export type Options = {
-  allowInInput?: boolean
-}
+export type Options = { allowInInput?: boolean }
 
 type RegisteredCallback = {
-  callback: Callback
+  callback: (event: KeyboardEvent) => void
   options?: Options
 }
 
-// Registered keyboard event callbacks
 let callbacks: RegisteredCallback[] = []
+let isInitialized = false
 
-// Track if IME input suggestions are open so we can ignore keydown shortcuts
-// in this case, they should never be triggered from mobile keyboards.
-let imeOpen = false
+const initializeKeyboardListeners = () => {
+  if (isServer() || isInitialized) return
 
-// Based on implementation in react-use
-// https://github.com/streamich/react-use/blob/master/src/useKey.ts#L15-L22
+  let imeOpen = false
+
+  window.addEventListener("keydown", (event) => {
+    if (imeOpen) return
+
+    for (const registered of [...callbacks].reverse()) {
+      if (event.defaultPrevented) break
+
+      if (
+        !isTextInput(event.target as HTMLElement) ||
+        registered.options?.allowInInput ||
+        isModKey(event)
+      ) {
+        registered.callback(event)
+      }
+    }
+  })
+
+  window.addEventListener("compositionstart", () => {
+    imeOpen = true
+  })
+  window.addEventListener("compositionend", () => {
+    imeOpen = false
+  })
+
+  isInitialized = true
+}
+
 const createKeyPredicate = (keyFilter: KeyFilter) =>
   typeof keyFilter === "function"
     ? keyFilter
@@ -34,54 +54,24 @@ const createKeyPredicate = (keyFilter: KeyFilter) =>
 
 export function useKeyDown(
   key: KeyFilter,
-  fn: Callback,
+  fn: (event: KeyboardEvent) => void,
   options?: Options,
 ): void {
-  const predicate = createKeyPredicate(key)
+  const predicate = React.useMemo(() => createKeyPredicate(key), [key])
 
   React.useEffect(() => {
+    initializeKeyboardListeners()
+
     const handler = (event: KeyboardEvent) => {
       if (predicate(event)) {
         fn(event)
       }
     }
 
-    callbacks.push({
-      callback: handler,
-      options,
-    })
+    callbacks.push({ callback: handler, options })
 
     return () => {
       callbacks = callbacks.filter((cb) => cb.callback !== handler)
     }
   }, [fn, predicate, options])
 }
-
-window.addEventListener("keydown", (event) => {
-  if (imeOpen) {
-    return
-  }
-
-  // reverse so that the last registered callbacks get executed first
-  for (const registered of callbacks.reverse()) {
-    if (event.defaultPrevented === true) {
-      break
-    }
-
-    if (
-      !isTextInput(event.target as HTMLElement) ||
-      registered.options?.allowInInput ||
-      isModKey(event)
-    ) {
-      registered.callback(event)
-    }
-  }
-})
-
-window.addEventListener("compositionstart", () => {
-  imeOpen = true
-})
-
-window.addEventListener("compositionend", () => {
-  imeOpen = false
-})
